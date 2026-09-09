@@ -1,0 +1,404 @@
+import React, { useState } from 'react';
+import {
+  format,
+  parseISO,
+  startOfWeek,
+  addDays,
+  differenceInMinutes,
+  isSameDay,
+  getHours,
+  getMinutes,
+} from 'date-fns';
+import {
+  AlertCircle,
+  BookOpen,
+  Check,
+  CheckCircle2,
+  Clock,
+  Dumbbell,
+  Flame,
+  MoreVertical,
+  Play,
+  RotateCcw,
+  Sparkles,
+  Utensils,
+  XCircle,
+} from 'lucide-react';
+import { ScheduleBlock, ActivityCategory, BlockStatus } from '../types/database';
+import { useScheduleBlocks } from '../hooks/useSchedule';
+import { useRebalanceStore } from '../store/useRebalanceStore';
+
+export const TimelineGrid: React.FC = () => {
+  const selectedDate = useRebalanceStore((s) => s.selectedDate);
+  const viewMode = useRebalanceStore((s) => s.viewMode);
+  const setSelectedDate = useRebalanceStore((s) => s.setSelectedDate);
+  const openQuickLog = useRebalanceStore((s) => s.openQuickLog);
+  const startStudyTimer = useRebalanceStore((s) => s.startStudyTimer);
+
+  const { data: allBlocks = [], updateBlock } = useScheduleBlocks();
+
+  // Active quick action popover menu
+  const [activeMenuBlockId, setActiveMenuBlockId] = useState<string | null>(null);
+
+  const currentDateObj = parseISO(selectedDate);
+
+  // Category visual color mappings
+  const getCategoryTheme = (category: ActivityCategory, isBuffer: boolean = false) => {
+    switch (category) {
+      case 'academic':
+        return {
+          bg: 'bg-blue-950/70 hover:bg-blue-900/80',
+          border: isBuffer ? 'border-dashed border-cyan-400' : 'border-blue-500/50 hover:border-blue-400',
+          text: 'text-blue-100',
+          badge: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+          accent: 'bg-blue-500',
+          icon: BookOpen,
+          unit: 'min',
+        };
+      case 'fitness':
+        return {
+          bg: 'bg-emerald-950/70 hover:bg-emerald-900/80',
+          border: isBuffer ? 'border-dashed border-emerald-400' : 'border-emerald-500/50 hover:border-emerald-400',
+          text: 'text-emerald-100',
+          badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+          accent: 'bg-emerald-500',
+          icon: Dumbbell,
+          unit: 'min',
+        };
+      case 'meal':
+        return {
+          bg: 'bg-amber-950/70 hover:bg-amber-900/80',
+          border: isBuffer ? 'border-dashed border-amber-400' : 'border-amber-500/50 hover:border-amber-400',
+          text: 'text-amber-100',
+          badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+          accent: 'bg-amber-500',
+          icon: Utensils,
+          unit: 'kcal',
+        };
+    }
+  };
+
+  const getStatusBadge = (status: BlockStatus) => {
+    switch (status) {
+      case 'completed':
+        return {
+          label: 'Completed',
+          className: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+          icon: CheckCircle2,
+        };
+      case 'missed':
+        return {
+          label: 'Missed (In Debt)',
+          className: 'bg-rose-500/20 text-rose-300 border-rose-500/30 animate-pulse-subtle',
+          icon: XCircle,
+        };
+      case 'compensated':
+        return {
+          label: 'Rebalanced',
+          className: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+          icon: Sparkles,
+        };
+      case 'scheduled':
+      default:
+        return {
+          label: 'Scheduled',
+          className: 'bg-slate-700/50 text-slate-300 border-slate-600',
+          icon: Clock,
+        };
+    }
+  };
+
+  // Block quick actions
+  const handleComplete = async (block: ScheduleBlock, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveMenuBlockId(null);
+    await updateBlock({
+      id: block.id,
+      updates: {
+        status: 'completed',
+        actual_value: block.target_value,
+      },
+    });
+  };
+
+  const handleMarkMissed = async (block: ScheduleBlock, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveMenuBlockId(null);
+    await updateBlock({
+      id: block.id,
+      updates: {
+        status: 'missed',
+        actual_value: 0,
+      },
+    });
+  };
+
+  const handleCustomLog = (block: ScheduleBlock, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveMenuBlockId(null);
+    const type = block.category === 'academic' ? 'study' : block.category === 'fitness' ? 'workout' : 'meal';
+    openQuickLog({ type, block });
+  };
+
+  const handleStartTimer = (block: ScheduleBlock, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveMenuBlockId(null);
+    startStudyTimer(block);
+  };
+
+  // Day View Render (24-hour vertical timeline)
+  const renderDayView = () => {
+    const dayBlocks = allBlocks
+      .filter((b) => isSameDay(parseISO(b.start_time), currentDateObj))
+      .sort((a, b) => parseISO(a.start_time).getTime() - parseISO(b.start_time).getTime());
+
+    // 24 hours (00:00 to 23:00)
+    const hours = Array.from({ length: 24 }, (_, i) => i);
+
+    return (
+      <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 lg:p-6 shadow-xl relative">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+          <div>
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <span>{format(currentDateObj, 'EEEE, MMMM do, yyyy')}</span>
+              <span className="text-xs font-normal text-slate-400">({dayBlocks.length} planned activities)</span>
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Click on any block to mark complete, log custom numbers, start stopwatch, or trigger rebalance.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            <span className="flex items-center gap-1 text-blue-400 font-medium">
+              <span className="w-2.5 h-2.5 rounded-sm bg-blue-500" /> Academic
+            </span>
+            <span className="flex items-center gap-1 text-emerald-400 font-medium">
+              <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" /> Fitness
+            </span>
+            <span className="flex items-center gap-1 text-amber-400 font-medium">
+              <span className="w-2.5 h-2.5 rounded-sm bg-amber-500" /> Meal
+            </span>
+          </div>
+        </div>
+
+        {/* Vertical 24-Hour Day Timeline */}
+        <div className="relative divide-y divide-slate-800/60">
+          {hours.map((hour) => {
+            // Find blocks that fall within or start in this hour
+            const matchingBlocks = dayBlocks.filter((b) => {
+              const startH = getHours(parseISO(b.start_time));
+              return startH === hour;
+            });
+
+            return (
+              <div key={hour} className="group relative flex items-start gap-4 py-3 min-h-[64px] hover:bg-slate-800/20 transition-colors rounded-lg px-2">
+                {/* Time Axis Column */}
+                <div className="w-16 shrink-0 text-right font-mono text-xs font-semibold text-slate-500 group-hover:text-slate-300 transition-colors pt-0.5">
+                  {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
+                </div>
+
+                {/* Blocks Container */}
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {matchingBlocks.map((block) => {
+                    const theme = getCategoryTheme(block.category, block.is_buffer);
+                    const statusTheme = getStatusBadge(block.status);
+                    const durationMins = differenceInMinutes(parseISO(block.end_time), parseISO(block.start_time));
+                    const isMenuOpen = activeMenuBlockId === block.id;
+
+                    return (
+                      <div
+                        key={block.id}
+                        onClick={() => handleCustomLog(block)}
+                        className={`relative rounded-xl p-3 border shadow-md transition-all cursor-pointer group/card ${theme.bg} ${theme.border} hover:scale-[1.01]`}
+                      >
+                        {/* Buffer badge */}
+                        {block.is_buffer && (
+                          <div className="absolute -top-2 right-3 px-2 py-0.5 rounded-full bg-cyan-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider shadow-sm flex items-center gap-1">
+                            <Sparkles className="w-3 h-3" /> Rebalance Buffer
+                          </div>
+                        )}
+
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`p-1.5 rounded-lg ${theme.badge}`}>
+                              <theme.icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-sm text-white tracking-tight leading-snug line-clamp-1">
+                                {block.title}
+                              </h4>
+                              <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono mt-0.5">
+                                <span>{format(parseISO(block.start_time), 'HH:mm')} – {format(parseISO(block.end_time), 'HH:mm')}</span>
+                                <span>•</span>
+                                <span>{durationMins}m duration</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Quick Actions Dropdown Trigger */}
+                          <div className="relative">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveMenuBlockId(isMenuOpen ? null : block.id);
+                              }}
+                              className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                              title="Block Options"
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+
+                            {/* Dropdown Menu */}
+                            {isMenuOpen && (
+                              <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute right-0 top-6 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-1.5 z-40 animate-fade-in text-xs font-medium space-y-0.5"
+                              >
+                                <button
+                                  onClick={(e) => handleComplete(block, e)}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-950/60 flex items-center gap-2"
+                                >
+                                  <Check className="w-3.5 h-3.5" /> Mark Completed
+                                </button>
+                                {block.category === 'academic' && (
+                                  <button
+                                    onClick={(e) => handleStartTimer(block, e)}
+                                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-blue-300 hover:bg-blue-950/60 flex items-center gap-2"
+                                  >
+                                    <Play className="w-3.5 h-3.5" /> Start Study Stopwatch
+                                  </button>
+                                )}
+                                <button
+                                  onClick={(e) => handleCustomLog(block, e)}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-amber-300 hover:bg-amber-950/60 flex items-center gap-2"
+                                >
+                                  <Clock className="w-3.5 h-3.5" /> Custom Log / Value
+                                </button>
+                                <button
+                                  onClick={(e) => handleMarkMissed(block, e)}
+                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-rose-300 hover:bg-rose-950/60 flex items-center gap-2"
+                                >
+                                  <XCircle className="w-3.5 h-3.5" /> Mark as Missed
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Bottom Row: Values & Status Badge */}
+                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-800/80">
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className="text-slate-400">Progress:</span>
+                            <span className="font-mono font-bold text-white">
+                              {block.actual_value || 0}
+                            </span>
+                            <span className="text-slate-400">/ {block.target_value} {theme.unit}</span>
+                          </div>
+
+                          <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusTheme.className}`}>
+                            <statusTheme.icon className="w-3 h-3" />
+                            <span>{statusTheme.label}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // Week View Render (7 columns)
+  const renderWeekView = () => {
+    const weekStart = startOfWeek(currentDateObj, { weekStartsOn: 1 }); // Monday start
+    const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+
+    return (
+      <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 lg:p-6 shadow-xl">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+          <div>
+            <h2 className="text-lg font-bold text-white">
+              Week of {format(weekStart, 'MMM d, yyyy')}
+            </h2>
+            <p className="text-xs text-slate-400">
+              Overview of university study loads, fitness volume, and meal windows across the 7-day cycle.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
+          {days.map((day) => {
+            const dateKey = format(day, 'yyyy-MM-dd');
+            const isToday = isSameDay(day, new Date());
+            const isSelected = isSameDay(day, currentDateObj);
+            const dayBlocks = allBlocks
+              .filter((b) => isSameDay(parseISO(b.start_time), day))
+              .sort((a, b) => parseISO(a.start_time).getTime() - parseISO(b.start_time).getTime());
+
+            return (
+              <div
+                key={dateKey}
+                onClick={() => setSelectedDate(dateKey)}
+                className={`rounded-xl p-3 border transition-all cursor-pointer flex flex-col min-h-[360px] ${
+                  isSelected
+                    ? 'bg-slate-800/90 border-cyan-500 shadow-cyan-950/40 shadow-lg'
+                    : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                }`}
+              >
+                {/* Column Day Header */}
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                  <div className="text-left">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                      {format(day, 'EEE')}
+                    </span>
+                    <span className={`text-base font-extrabold ${isToday ? 'text-cyan-400' : 'text-white'}`}>
+                      {format(day, 'd')}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+                    {dayBlocks.length}
+                  </span>
+                </div>
+
+                {/* Day Blocks List */}
+                <div className="space-y-2 flex-1 overflow-y-auto">
+                  {dayBlocks.length === 0 ? (
+                    <div className="text-[11px] text-slate-600 italic text-center py-6">
+                      No blocks scheduled
+                    </div>
+                  ) : (
+                    dayBlocks.map((b) => {
+                      const theme = getCategoryTheme(b.category, b.is_buffer);
+                      return (
+                        <div
+                          key={b.id}
+                          className={`rounded-lg p-2 border text-xs text-left ${theme.bg} ${theme.border} hover:scale-[1.02] transition-transform`}
+                        >
+                          <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
+                            <span>{format(parseISO(b.start_time), 'HH:mm')}</span>
+                            <span className="uppercase font-bold tracking-wider">{b.status}</span>
+                          </div>
+                          <p className="font-semibold text-white line-clamp-1">{b.title}</p>
+                          <div className="text-[10px] text-slate-300 mt-1 flex justify-between">
+                            <span>Target: {b.target_value}</span>
+                            <span>Done: {b.actual_value}</span>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return viewMode === 'day' ? renderDayView() : renderWeekView();
+};
