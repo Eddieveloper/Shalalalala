@@ -4,7 +4,7 @@ import { useRebalanceStore } from '../store/useRebalanceStore';
 import { useActivityDebts, useNutritionLogs, useProfile, useScheduleBlocks } from './useSchedule';
 import { calculateAcademicStrategies, calculateFitnessStrategies } from '../engine/academicMath';
 import { calculateNutritionStrategies } from '../engine/nutritionMath';
-import { PendingRecoveryPrompt } from '../types/rebalance';
+import { PendingRecoveryPrompt, RecoveryStrategy } from '../types/rebalance';
 import { ScheduleBlock, NutritionLog } from '../types/database';
 
 export function useMissedDetector() {
@@ -60,7 +60,7 @@ export function useMissedDetector() {
             });
 
             // D. Generate strategies based on category
-            let strategies = [];
+            let strategies: RecoveryStrategy[] = [];
             if (block.category === 'academic') {
               const upcomingStudyBlocks = blocks.filter(
                 (b) =>
@@ -140,7 +140,7 @@ export function useMissedDetector() {
           const linkedBlock = blocks.find((b) => b.id === debt.source_block_id);
           const blockTitle = linkedBlock?.title || `${debt.category.toUpperCase()} Session`;
 
-          let strategies = [];
+          let strategies: RecoveryStrategy[] = [];
           if (debt.category === 'academic') {
             const mockBlock: ScheduleBlock = linkedBlock || {
               id: debt.source_block_id || 'synthetic-block',

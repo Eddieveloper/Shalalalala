@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { Database, Profile, Activity, ScheduleBlock, NutritionLog, ActivityDebt } from '../types/database';
 import { generateInitialScheduleAndLogs, initialActivities, initialProfile, MOCK_USER_ID } from './mockData';
 
@@ -11,7 +11,7 @@ export const isSupabaseConfigured = Boolean(
   supabaseUrl !== 'https://your-project.supabase.co'
 );
 
-export const supabase: SupabaseClient<Database> | null = isSupabaseConfigured
+export const supabase: any = isSupabaseConfigured
   ? createClient<Database>(supabaseUrl!, supabaseAnonKey!)
   : null;
 
