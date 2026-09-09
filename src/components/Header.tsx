@@ -67,157 +67,145 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3 transition-colors">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-        {/* Brand Logo & Tagline */}
-        <div className="flex items-center justify-between w-full md:w-auto gap-4">
+    <header className="sticky top-0 z-30 mb-6 rounded-[28px] border border-[#f3d7d4] bg-white/80 px-4 py-3 shadow-[0_10px_35px_rgba(166,91,95,0.08)] backdrop-blur-xl lg:px-6">
+      <div className="mx-auto flex flex-col items-center justify-between gap-3 md:flex-row">
+        <div className="flex w-full items-center justify-between gap-4 md:w-auto">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 ring-1 ring-white/20">
-              <Zap className="w-5 h-5 text-white stroke-[2.5]" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#fda7a2] via-[#f57f7d] to-[#d76f73] text-white shadow-[0_10px_24px_rgba(240,116,111,0.35)] ring-2 ring-white">
+              <Zap className="h-5 w-5 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl tracking-tight text-white">Rebalance</span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                  Recovery Engine
+                <span className="text-2xl font-extrabold tracking-[-0.06em] text-[#341d23]">Rebalanced</span>
+                <span className="rounded-full border border-[#f5b7b0] bg-[#fff1ef] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65959]">
+                  Coral Journal
                 </span>
               </div>
-              <p className="text-xs text-slate-400 hidden sm:block">Academic, Fitness & Calorie Deficit Amortizer</p>
+              <p className="hidden text-[11px] uppercase tracking-[0.18em] text-[#82666e] sm:block">Academic, fitness, and calorie recovery</p>
             </div>
           </div>
 
-          {/* Mobile Settings Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 md:hidden transition-colors"
+            className="rounded-xl border border-[#f3d7d4] bg-[#fff8f6] p-2 text-[#6b4c54] transition hover:border-[#f1b1ac] hover:bg-[#fff0ee] md:hidden"
             title="Settings"
           >
-            <SettingsIcon className="w-4 h-4" />
+            <SettingsIcon className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Center: Date Navigation & Day/Week Toggle */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-center">
-          <div className="flex items-center bg-slate-800/90 rounded-lg p-1 border border-slate-700/60 shadow-inner">
+        <div className="flex w-full items-center justify-center gap-3 md:w-auto">
+          <div className="flex items-center rounded-2xl border border-[#f2d8d3] bg-[#fff7f5] p-1 shadow-inner shadow-[#f5d0ca]/40">
             <button
               onClick={() => handleDateShift(-1)}
-              className="p-1.5 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="rounded-xl p-1.5 text-[#5f4650] transition hover:bg-[#ffe9e6] hover:text-[#2b1c21]"
               title="Previous Day"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
 
             <button
               onClick={() => setSelectedDate(format(new Date(), 'yyyy-MM-dd'))}
-              className="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-cyan-400 flex items-center gap-1.5 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-[#432d35] transition hover:text-[#b1464c]"
             >
-              <CalendarIcon className="w-3.5 h-3.5 text-cyan-400" />
+              <CalendarIcon className="h-3.5 w-3.5 text-[#dd614f]" />
               <span>{format(parseISO(selectedDate), 'EEE, MMM d')}</span>
               {selectedDate === format(new Date(), 'yyyy-MM-dd') && (
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-[#f36f6b]" />
               )}
             </button>
 
             <button
               onClick={() => handleDateShift(1)}
-              className="p-1.5 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="rounded-xl p-1.5 text-[#5f4650] transition hover:bg-[#ffe9e6] hover:text-[#2b1c21]"
               title="Next Day"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          {/* View Mode Toggle */}
-          <div className="flex bg-slate-800/90 p-0.5 rounded-lg border border-slate-700/60 text-xs font-medium text-slate-400">
+          <div className="flex rounded-2xl border border-[#f2d8d3] bg-[#fff7f5] p-0.5 text-xs font-semibold text-[#6a535b] shadow-inner shadow-[#f5d0ca]/30">
             <button
               onClick={() => setViewMode('day')}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              className={`rounded-xl px-3 py-1.5 transition-all ${
                 viewMode === 'day'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
-                  : 'hover:text-slate-200'
+                  ? 'bg-[#f86f6a] text-white shadow-[0_8px_20px_rgba(248,111,106,0.25)]'
+                  : 'hover:bg-[#ffe9e6]'
               }`}
             >
               Day
             </button>
             <button
               onClick={() => setViewMode('week')}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              className={`rounded-xl px-3 py-1.5 transition-all ${
                 viewMode === 'week'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
-                  : 'hover:text-slate-200'
+                  ? 'bg-[#f86f6a] text-white shadow-[0_8px_20px_rgba(248,111,106,0.25)]'
+                  : 'hover:bg-[#ffe9e6]'
               }`}
             >
-              7-Day Week
+              Week
             </button>
           </div>
         </div>
 
-        {/* Right: Active Timer / Supabase Status / Settings */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-          {/* Active Study Timer Pill */}
+        <div className="flex w-full items-center justify-end gap-3 md:w-auto">
           {activeTimer.blockId && (
-            <div className="flex items-center gap-2 bg-blue-950/80 border border-blue-500/40 px-3 py-1.5 rounded-xl shadow-lg shadow-blue-950/50 animate-pulse-subtle">
-              <Clock className="w-4 h-4 text-blue-400 animate-spin" style={{ animationDuration: '4s' }} />
+            <div className="flex items-center gap-2 rounded-2xl border border-[#f0c0bb] bg-[#fff2f1] px-3 py-1.5 shadow-[0_8px_18px_rgba(238,115,116,0.09)]">
+              <Clock className="h-4 w-4 text-[#d75a60] animate-spin" style={{ animationDuration: '4s' }} />
               <div className="flex flex-col text-left">
-                <span className="text-[10px] text-blue-300 font-medium truncate max-w-[110px]">
+                <span className="max-w-[110px] truncate text-[10px] font-medium uppercase tracking-[0.18em] text-[#8d6670]">
                   {activeTimer.blockTitle}
                 </span>
-                <span className="font-mono text-xs font-bold text-white tracking-wider">
+                <span className="font-mono text-xs font-bold text-[#2e1d23] tracking-wider">
                   {formatTimer(activeTimer.elapsedSeconds)}
                 </span>
               </div>
-              <div className="flex items-center gap-1 ml-1">
+              <div className="ml-1 flex items-center gap-1">
                 {activeTimer.isRunning ? (
                   <button
                     onClick={pauseStudyTimer}
-                    className="p-1 rounded bg-blue-800/60 hover:bg-blue-700 text-blue-200"
+                    className="rounded-lg bg-[#f8dcdc] p-1 text-[#8d3e4b] hover:bg-[#f6c7c5]"
                     title="Pause Stopwatch"
                   >
-                    <Pause className="w-3 h-3" />
+                    <Pause className="h-3 w-3" />
                   </button>
                 ) : (
                   <button
                     onClick={resumeStudyTimer}
-                    className="p-1 rounded bg-emerald-700/80 hover:bg-emerald-600 text-white"
+                    className="rounded-lg bg-[#f6beaa] p-1 text-[#692b33] hover:bg-[#f2a793]"
                     title="Resume Stopwatch"
                   >
-                    <Play className="w-3 h-3" />
+                    <Play className="h-3 w-3" />
                   </button>
                 )}
                 <button
                   onClick={handleStopTimer}
-                  className="p-1 rounded bg-rose-900/60 hover:bg-rose-800 text-rose-200"
+                  className="rounded-lg bg-[#f8c7d0] p-1 text-[#7b2e3d] hover:bg-[#f5b2bf]"
                   title="Finish and Save Study Session"
                 >
-                  <Square className="w-3 h-3 fill-rose-300" />
+                  <Square className="h-3 w-3 fill-current" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* Supabase Status Indicator */}
           <div
-            className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
+            className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium sm:flex ${
               isSupabaseConfigured
-                ? 'bg-emerald-950/50 text-emerald-300 border-emerald-500/30'
-                : 'bg-slate-800 text-slate-300 border-slate-700'
+                ? 'border-[#d8f1d7] bg-[#f2fbf1] text-[#2c8d5a]'
+                : 'border-[#f6d7d7] bg-[#fff5f5] text-[#905c68]'
             }`}
             title={isSupabaseConfigured ? 'Connected to live Supabase backend' : 'Running in Local Storage Sandbox mode'}
           >
-            <span
-              className={`w-2 h-2 rounded-full ${
-                isSupabaseConfigured ? 'bg-emerald-400' : 'bg-cyan-400'
-              }`}
-            />
+            <span className={`h-2 w-2 rounded-full ${isSupabaseConfigured ? 'bg-[#49b774]' : 'bg-[#f26b6b]'}`} />
             <span>{isSupabaseConfigured ? 'Supabase Live' : 'Local Sandbox'}</span>
           </div>
 
-          {/* Settings Trigger */}
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white transition-colors"
+            className="hidden items-center gap-1.5 rounded-xl border border-[#f1d8d3] bg-[#fff9f8] px-3 py-1.5 text-xs font-semibold text-[#4f3740] transition hover:border-[#e9b5b1] hover:bg-[#fff1ef] md:flex"
           >
-            <SettingsIcon className="w-3.5 h-3.5 text-slate-400" />
+            <SettingsIcon className="h-3.5 w-3.5 text-[#c0625d]" />
             <span>Settings</span>
           </button>
         </div>

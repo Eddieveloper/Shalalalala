@@ -18,13 +18,15 @@ export const ActionRequiredBanner: React.FC = () => {
 
   if (unresolvedDebts.length === 0 && !activePrompt && promptQueue.length === 0) {
     return (
-      <div className="bg-slate-900/40 border border-emerald-500/20 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs text-slate-300">
+      <div className="flex items-center justify-between gap-3 rounded-[22px] border border-[#f3d7d4] bg-white/80 px-4 py-3 text-xs text-[#4d3a41] shadow-[0_12px_28px_rgba(194,126,122,0.08)]">
         <div className="flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-emerald-400" />
+          <div className="rounded-full bg-[#fef0ef] p-1.5 text-[#d96461]">
+            <CheckCircle className="h-4 w-4" />
+          </div>
           <span>All schedules and metabolic windows are in balance. Zero pending activity debt.</span>
         </div>
-        <span className="text-[11px] font-semibold text-emerald-400/80 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-          In Equilibrium
+        <span className="rounded-full border border-[#f5c4bf] bg-[#fff0ee] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75d5f]">
+          In equilibrium
         </span>
       </div>
     );
@@ -124,29 +126,29 @@ export const ActionRequiredBanner: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-rose-950/80 via-amber-950/40 to-slate-900 border border-rose-500/40 rounded-xl p-4 shadow-xl shadow-rose-950/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-fade-in">
+    <div className="flex flex-col items-start justify-between gap-3 rounded-[26px] border border-[#f3d7d4] bg-gradient-to-r from-[#fffaf8] via-[#fff5f4] to-[#fff0ef] p-4 shadow-[0_16px_30px_rgba(208,127,125,0.08)] sm:flex-row sm:items-center">
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 mt-0.5 sm:mt-0">
-          <ShieldAlert className="w-5 h-5 animate-pulse" />
+        <div className="mt-0.5 shrink-0 rounded-2xl border border-[#f7c0bb] bg-[#fff1ef] p-2 text-[#d35d59]">
+          <ShieldAlert className="h-5 w-5 animate-pulse" />
         </div>
         <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-sm font-bold text-white tracking-wide">
-              Action Required: {unresolvedDebts.length} Missed Event{unresolvedDebts.length > 1 ? 's' : ''} Detected
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-lg font-bold text-[#341d23]">
+              Action required: {unresolvedDebts.length} missed event{unresolvedDebts.length > 1 ? 's' : ''} detected
             </h3>
-            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
-              Deficit Engine Active
+            <span className="rounded-full border border-[#f6bfbb] bg-[#fff0ee] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#c65d5e]">
+              deficit engine active
             </span>
           </div>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="mt-1 text-xs text-[#725b62]">
             {unresolvedDebts.map((d, i) => {
               const blk = blocks.find((b) => b.id === d.source_block_id);
               const label = blk ? blk.title : `${d.category} block`;
               const unit = d.category === 'nutrition' ? 'kcal' : 'm';
               return (
                 <span key={d.id}>
-                  {i > 0 && <span className="text-slate-500"> • </span>}
-                  <strong className="text-amber-300 font-semibold">{label}</strong> (-{d.deficit_amount} {unit})
+                  {i > 0 && <span className="text-[#bca5aa]"> • </span>}
+                  <strong className="font-semibold text-[#d66760]">{label}</strong> (-{d.deficit_amount} {unit})
                 </span>
               );
             })}
@@ -156,11 +158,11 @@ export const ActionRequiredBanner: React.FC = () => {
 
       <button
         onClick={handleResolve}
-        className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-rose-500/20 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shrink-0"
+        className="flex w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#f78f94] via-[#f16d6d] to-[#e78f7a] px-4 py-2.5 text-xs font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_12px_26px_rgba(245,105,104,0.25)] transition hover:translate-y-[-1px] sm:w-auto"
       >
-        <Sparkles className="w-4 h-4 text-slate-950 stroke-[2.5]" />
-        <span>Resolve with Rebalance Engine</span>
-        <ArrowRight className="w-3.5 h-3.5 text-slate-950 stroke-[2.5]" />
+        <Sparkles className="h-4 w-4 text-white" />
+        <span>Resolve with journal engine</span>
+        <ArrowRight className="h-3.5 w-3.5 text-white" />
       </button>
     </div>
   );

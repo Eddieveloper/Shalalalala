@@ -54,120 +54,110 @@ export const DashboardBanner: React.FC = () => {
   const unresolvedDebts = debts.filter((d) => d.status === 'unresolved');
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-950 rounded-2xl p-5 border border-slate-800 shadow-xl relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/3 -mb-8 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative overflow-hidden rounded-[28px] border border-[#f5d9d6] bg-white/80 p-5 shadow-[0_18px_55px_rgba(196,146,146,0.10)] backdrop-blur-sm">
+      <div className="pointer-events-none absolute -right-8 -top-10 h-56 w-56 rounded-full bg-[#ffd9d3]/60 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-10 left-1/4 h-52 w-52 rounded-full bg-[#ffe7e1]/80 blur-3xl" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative z-10">
-        {/* 1. Daily Calorie Progress */}
-        <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-700/60 flex flex-col justify-between hover:border-amber-500/40 transition-colors group">
+      <div className="relative z-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="rounded-[24px] border border-[#f4d5d1] bg-gradient-to-br from-[#fffaf8] to-[#fff0ee] p-4 text-[#402a31] shadow-[0_10px_25px_rgba(221,126,124,0.08)] transition hover:border-[#eaa8a1]">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  <Flame className="w-4 h-4" />
+                <div className="rounded-xl border border-[#f7c3bb] bg-[#ffece8] p-1.5 text-[#d9635d]">
+                  <Flame className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Nutrition Velocity</span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#9e6a72]">Nutrition velocity</span>
               </div>
-              <span className="text-xs font-semibold text-amber-400">
-                {caloriePercent}%
-              </span>
+              <span className="text-xs font-bold text-[#d9635d]">{caloriePercent}%</span>
             </div>
 
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-2xl font-black text-white tracking-tight">{consumedCalories}</span>
-              <span className="text-xs text-slate-400">/ {targetCalories} kcal</span>
+            <div className="mb-1 flex items-baseline gap-2">
+              <span className="text-3xl font-black tracking-[-0.06em] text-[#2e1c23]">{consumedCalories}</span>
+              <span className="text-xs text-[#7d6169]">/ {targetCalories} kcal</span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-[#705b63]">
               {calorieDeficit > 0 ? (
-                <span><strong className="text-amber-300">{calorieDeficit} kcal</strong> remaining to target</span>
+                <span><strong className="text-[#d9635d]">{calorieDeficit} kcal</strong> remaining to target</span>
               ) : (
-                <span className="text-emerald-400 font-medium">Daily metabolic target hit!</span>
+                <span className="font-semibold text-[#2d9f6b]">Daily metabolic target hit!</span>
               )}
             </p>
           </div>
 
-          {/* Progress Bar */}
-          <div className="mt-3 w-full bg-slate-950/80 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700/50">
+          <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full border border-[#f1d9d5] bg-[#fef4f2] p-0.5">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-emerald-400 transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#f5a6a3] via-[#f57f7d] to-[#e39f85] transition-all duration-500"
               style={{ width: `${caloriePercent}%` }}
             />
           </div>
         </div>
 
-        {/* 2. Academic Study Tracker */}
-        <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-700/60 flex flex-col justify-between hover:border-blue-500/40 transition-colors group">
+        <div className="rounded-[24px] border border-[#f2d4d0] bg-gradient-to-br from-[#fffaf8] to-[#fff1f7] p-4 text-[#402a31] shadow-[0_10px_25px_rgba(221,126,124,0.08)] transition hover:border-[#eaa8a1]">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                  <BookOpen className="w-4 h-4" />
+                <div className="rounded-xl border border-[#f7c8d6] bg-[#fff0f6] p-1.5 text-[#d46397]">
+                  <BookOpen className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Academic Focus</span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#9d7180]">Academic focus</span>
               </div>
-              <span className="text-xs font-semibold text-blue-400">
-                {studyPercent}%
-              </span>
+              <span className="text-xs font-bold text-[#d46397]">{studyPercent}%</span>
             </div>
 
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-2xl font-black text-white tracking-tight">{studyLoggedHours}h</span>
-              <span className="text-xs text-slate-400">/ {studyTargetHours}h target</span>
+            <div className="mb-1 flex items-baseline gap-2">
+              <span className="text-3xl font-black tracking-[-0.06em] text-[#2e1c23]">{studyLoggedHours}h</span>
+              <span className="text-xs text-[#7d6169]">/ {studyTargetHours}h target</span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-[#705b63]">
               {studyLoggedMins >= studyTargetMins && studyTargetMins > 0 ? (
-                <span className="text-emerald-400 font-medium">Target achieved for university modules</span>
+                <span className="font-semibold text-[#2d9f6b]">Target achieved for tonight’s sprint.</span>
               ) : (
                 <span>{Math.max(0, studyTargetMins - studyLoggedMins)} mins focus remaining today</span>
               )}
             </p>
           </div>
 
-          {/* Progress Bar */}
-          <div className="mt-3 w-full bg-slate-950/80 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700/50">
+          <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full border border-[#efd5e1] bg-[#fff5fa] p-0.5">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-[#f3a7cc] via-[#ee7bb2] to-[#d77a9b] transition-all duration-500"
               style={{ width: `${studyPercent}%` }}
             />
           </div>
         </div>
 
-        {/* 3. Workout & Deficit Balance Card */}
-        <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-700/60 flex flex-col justify-between hover:border-emerald-500/40 transition-colors group">
+        <div className="rounded-[24px] border border-[#f3d8d2] bg-gradient-to-br from-[#fffaf8] to-[#fff9f3] p-4 text-[#402a31] shadow-[0_10px_25px_rgba(221,126,124,0.08)] transition hover:border-[#eaa8a1]">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  <Dumbbell className="w-4 h-4" />
+                <div className="rounded-xl border border-[#f5d0c8] bg-[#fff1ee] p-1.5 text-[#d76e60]">
+                  <Dumbbell className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Training & Health</span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#8d6970]">Training & health</span>
               </div>
               {unresolvedDebts.length > 0 && (
-                <span className="flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                  <AlertTriangle className="w-3 h-3 text-rose-400" />
-                  {unresolvedDebts.length} Deficits
+                <span className="flex items-center gap-1 rounded-full border border-[#f5b9b5] bg-[#fff1ef] px-2 py-0.5 text-[10px] font-bold text-[#d15d65]">
+                  <AlertTriangle className="h-3 w-3" />
+                  {unresolvedDebts.length} debt
                 </span>
               )}
             </div>
 
             <div className="mt-1">
-              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold ${workoutBadge.color}`}>
-                <workoutBadge.icon className="w-3.5 h-3.5" />
+              <div className={`inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-bold ${workoutBadge.color}`}>
+                <workoutBadge.icon className="h-3.5 w-3.5" />
                 <span>{workoutBadge.label}</span>
               </div>
             </div>
 
-            <p className="text-[11px] text-slate-400 mt-3">
-              Sleep window configured: <span className="text-slate-200 font-semibold">{profile?.sleep_start_time ?? '23:00'} - {profile?.sleep_end_time ?? '07:00'}</span>
+            <p className="mt-3 text-[11px] text-[#705b63]">
+              Sleep window configured: <span className="font-semibold text-[#342326]">{profile?.sleep_start_time ?? '23:00'} - {profile?.sleep_end_time ?? '07:00'}</span>
             </p>
           </div>
 
-          <div className="mt-3 pt-2 border-t border-slate-700/40 flex items-center justify-between text-[11px] text-slate-400">
-            <span>Recovery Engine Status:</span>
-            <span className="text-cyan-400 font-medium flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Auto-Amortizer Active
+          <div className="mt-3 flex items-center justify-between border-t border-[#f1dad8] pt-2 text-[11px] text-[#725e63]">
+            <span>Recovery engine status</span>
+            <span className="flex items-center gap-1 font-semibold text-[#d16063]">
+              <Sparkles className="h-3 w-3" /> Auto-amortizer active
             </span>
           </div>
         </div>

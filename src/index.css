@@ -1,26 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Patrick+Hand&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --pink-50: #fff7f5;
+  --pink-100: #ffe9e5;
+  --pink-200: #ffd7d1;
+  --pink-300: #ffb9b1;
+  --pink-400: #ff8a7a;
+  --pink-500: #f8675d;
+  --pink-600: #e94d4d;
+  --rose-700: #b54252;
+  --ink: #2e1b23;
+  --paper: #fffaf8;
+  --ivory: #fffdfb;
+  --mauve: #f3dfe3;
+  --soft-gray: #6a5a62;
+  --line: rgba(83, 39, 52, 0.12);
+}
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans;
+    @apply antialiased;
+    background:
+      radial-gradient(circle at top left, rgba(255, 182, 174, 0.30), transparent 32%),
+      linear-gradient(180deg, #fff9f8 0%, #fff3f1 100%);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom subtle scrollbar */
+  #root {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: -0.03em;
+  }
+
+  .magazine-script {
+    font-family: 'Patrick Hand', cursive;
+    letter-spacing: 0.01em;
+  }
+
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(244, 208, 208, 0.7);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(51, 65, 85, 0.8);
+    background: rgba(232, 112, 109, 0.8);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 116, 139, 1);
+    background: rgba(201, 75, 75, 0.9);
   }
 }

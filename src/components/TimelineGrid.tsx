@@ -47,31 +47,31 @@ export const TimelineGrid: React.FC = () => {
     switch (category) {
       case 'academic':
         return {
-          bg: 'bg-blue-950/70 hover:bg-blue-900/80',
-          border: isBuffer ? 'border-dashed border-cyan-400' : 'border-blue-500/50 hover:border-blue-400',
-          text: 'text-blue-100',
-          badge: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-          accent: 'bg-blue-500',
+          bg: 'bg-[#fdf2f5] hover:bg-[#fceef2]',
+          border: isBuffer ? 'border-dashed border-[#ef9cb1]' : 'border-[#f0c7d4] hover:border-[#ea9db4]',
+          text: 'text-[#3b212a]',
+          badge: 'bg-[#ffe7f0] text-[#c86289] border-[#f0bfd5]',
+          accent: 'bg-[#d96a8d]',
           icon: BookOpen,
           unit: 'min',
         };
       case 'fitness':
         return {
-          bg: 'bg-emerald-950/70 hover:bg-emerald-900/80',
-          border: isBuffer ? 'border-dashed border-emerald-400' : 'border-emerald-500/50 hover:border-emerald-400',
-          text: 'text-emerald-100',
-          badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-          accent: 'bg-emerald-500',
+          bg: 'bg-[#fff8f4] hover:bg-[#fff1ed]',
+          border: isBuffer ? 'border-dashed border-[#efae9c]' : 'border-[#f4d7cf] hover:border-[#eb9d8c]',
+          text: 'text-[#3d2f2d]',
+          badge: 'bg-[#fff1eb] text-[#d46d5d] border-[#f1d0c5]',
+          accent: 'bg-[#e27b66]',
           icon: Dumbbell,
           unit: 'min',
         };
       case 'meal':
         return {
-          bg: 'bg-amber-950/70 hover:bg-amber-900/80',
-          border: isBuffer ? 'border-dashed border-amber-400' : 'border-amber-500/50 hover:border-amber-400',
-          text: 'text-amber-100',
-          badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-          accent: 'bg-amber-500',
+          bg: 'bg-[#fffaf3] hover:bg-[#fff3dd]',
+          border: isBuffer ? 'border-dashed border-[#e9c07a]' : 'border-[#f1d88a] hover:border-[#e4b95f]',
+          text: 'text-[#3a2d1f]',
+          badge: 'bg-[#fff4d9] text-[#b77c24] border-[#f0d89e]',
+          accent: 'bg-[#d39a3f]',
           icon: Utensils,
           unit: 'kcal',
         };
@@ -156,33 +156,33 @@ export const TimelineGrid: React.FC = () => {
     const hours = Array.from({ length: 24 }, (_, i) => i);
 
     return (
-      <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 lg:p-6 shadow-xl relative">
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+      <div className="relative rounded-[28px] border border-[#f3d7d4] bg-white/85 p-4 shadow-[0_18px_50px_rgba(204,153,153,0.09)] lg:p-6">
+        <div className="mb-4 flex items-center justify-between border-b border-[#f5dfe1] pb-4">
           <div>
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <h2 className="flex items-center gap-2 text-3xl font-bold text-[#2c1c21]">
               <span>{format(currentDateObj, 'EEEE, MMMM do, yyyy')}</span>
-              <span className="text-xs font-normal text-slate-400">({dayBlocks.length} planned activities)</span>
+              <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#8d666d]">({dayBlocks.length} planned activities)</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="mt-1 text-xs text-[#7a5d62]">
               Click on any block to mark complete, log custom numbers, start stopwatch, or trigger rebalance.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs">
-            <span className="flex items-center gap-1 text-blue-400 font-medium">
-              <span className="w-2.5 h-2.5 rounded-sm bg-blue-500" /> Academic
+            <span className="flex items-center gap-1 font-medium text-[#d86a8f]">
+              <span className="h-2.5 w-2.5 rounded-sm bg-[#d86a8f]" /> Academic
             </span>
-            <span className="flex items-center gap-1 text-emerald-400 font-medium">
-              <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" /> Fitness
+            <span className="flex items-center gap-1 font-medium text-[#d97d63]">
+              <span className="h-2.5 w-2.5 rounded-sm bg-[#d97d63]" /> Fitness
             </span>
-            <span className="flex items-center gap-1 text-amber-400 font-medium">
-              <span className="w-2.5 h-2.5 rounded-sm bg-amber-500" /> Meal
+            <span className="flex items-center gap-1 font-medium text-[#c89439]">
+              <span className="h-2.5 w-2.5 rounded-sm bg-[#c89439]" /> Meal
             </span>
           </div>
         </div>
 
         {/* Vertical 24-Hour Day Timeline */}
-        <div className="relative divide-y divide-slate-800/60">
+        <div className="relative divide-y divide-[#f3dfe1]">
           {hours.map((hour) => {
             // Find blocks that fall within or start in this hour
             const matchingBlocks = dayBlocks.filter((b) => {
@@ -193,12 +193,12 @@ export const TimelineGrid: React.FC = () => {
             return (
               <div key={hour} className="group relative flex items-start gap-4 py-3 min-h-[64px] hover:bg-slate-800/20 transition-colors rounded-lg px-2">
                 {/* Time Axis Column */}
-                <div className="w-16 shrink-0 text-right font-mono text-xs font-semibold text-slate-500 group-hover:text-slate-300 transition-colors pt-0.5">
+                <div className="w-16 shrink-0 pt-0.5 text-right font-mono text-xs font-semibold text-[#9a707a] transition-colors group-hover:text-[#573b43]">
                   {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
                 </div>
 
                 {/* Blocks Container */}
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="grid flex-1 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
                   {matchingBlocks.map((block) => {
                     const theme = getCategoryTheme(block.category, block.is_buffer);
                     const statusTheme = getStatusBadge(block.status);
@@ -209,7 +209,7 @@ export const TimelineGrid: React.FC = () => {
                       <div
                         key={block.id}
                         onClick={() => handleCustomLog(block)}
-                        className={`relative rounded-xl p-3 border shadow-md transition-all cursor-pointer group/card ${theme.bg} ${theme.border} hover:scale-[1.01]`}
+                        className={`group/card relative cursor-pointer rounded-[20px] border p-3 shadow-[0_10px_22px_rgba(192,136,131,0.08)] transition-all hover:-translate-y-0.5 ${theme.bg} ${theme.border}`}
                       >
                         {/* Buffer badge */}
                         {block.is_buffer && (
@@ -220,14 +220,14 @@ export const TimelineGrid: React.FC = () => {
 
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <div className={`p-1.5 rounded-lg ${theme.badge}`}>
-                              <theme.icon className="w-3.5 h-3.5" />
+                            <div className={`rounded-xl border p-1.5 ${theme.badge}`}>
+                              <theme.icon className="h-3.5 w-3.5" />
                             </div>
                             <div>
-                              <h4 className="font-bold text-sm text-white tracking-tight leading-snug line-clamp-1">
+                              <h4 className="line-clamp-1 text-sm font-bold leading-snug text-[#2d1d23] tracking-tight">
                                 {block.title}
                               </h4>
-                              <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono mt-0.5">
+                              <div className="mt-0.5 flex items-center gap-2 font-mono text-[11px] text-[#7f636b]">
                                 <span>{format(parseISO(block.start_time), 'HH:mm')} – {format(parseISO(block.end_time), 'HH:mm')}</span>
                                 <span>•</span>
                                 <span>{durationMins}m duration</span>
@@ -286,17 +286,17 @@ export const TimelineGrid: React.FC = () => {
                         </div>
 
                         {/* Bottom Row: Values & Status Badge */}
-                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-800/80">
+                        <div className="mt-3 flex items-center justify-between border-t border-[#eedfe0] pt-2">
                           <div className="flex items-center gap-1.5 text-xs">
-                            <span className="text-slate-400">Progress:</span>
-                            <span className="font-mono font-bold text-white">
+                            <span className="text-[#7d646c]">Progress:</span>
+                            <span className="font-mono font-bold text-[#2b1a20]">
                               {block.actual_value || 0}
                             </span>
-                            <span className="text-slate-400">/ {block.target_value} {theme.unit}</span>
+                            <span className="text-[#7d646c]">/ {block.target_value} {theme.unit}</span>
                           </div>
 
-                          <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusTheme.className}`}>
-                            <statusTheme.icon className="w-3 h-3" />
+                          <div className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${statusTheme.className}`}>
+                            <statusTheme.icon className="h-3 w-3" />
                             <span>{statusTheme.label}</span>
                           </div>
                         </div>
