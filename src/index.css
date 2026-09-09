@@ -28,9 +28,7 @@
 
   body {
     @apply antialiased;
-    background:
-      radial-gradient(circle at top left, rgba(255, 182, 174, 0.30), transparent 32%),
-      linear-gradient(180deg, #fff9f8 0%, #fff3f1 100%);
+    background: linear-gradient(180deg, #fffaf8 0%, #fff3f0 100%);
     color: var(--ink);
     font-family: 'Manrope', sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -50,6 +48,23 @@
     letter-spacing: 0.01em;
   }
 
+  .hello-screen {
+    animation: helloFloat 0.8s ease-out;
+  }
+
+  .hello-wave {
+    animation: wave 1.6s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, #f7e6e4 25%, #fffaf8 50%, #f7e6e4 75%);
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.2s ease-in-out infinite;
+  }
+
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -63,5 +78,40 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(201, 75, 75, 0.9);
+  }
+}
+
+@keyframes helloFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }

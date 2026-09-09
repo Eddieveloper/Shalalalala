@@ -164,55 +164,55 @@ export const QuickLogDrawer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in">
-      <div className="w-full sm:max-w-lg bg-slate-900 border-t sm:border border-slate-700 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-slide-up">
-        {/* Drawer Drag handle / Header */}
-        <div className="pt-3 pb-2 px-6 flex flex-col items-center border-b border-slate-800 relative bg-slate-900/90">
-          <div className="w-12 h-1.5 rounded-full bg-slate-700 mb-3 sm:hidden" />
-          <div className="flex items-center justify-between w-full">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#261b1f]/55 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+      <div className="flex max-h-[85vh] w-full flex-col overflow-hidden rounded-t-[28px] border-t border-[#f3d7d4] bg-[#fffaf8] shadow-[0_30px_80px_rgba(76,45,49,0.14)] sm:max-w-lg sm:rounded-[28px] sm:border">
+        <div className="relative border-b border-[#f4dfe1] bg-[#fff5f3] px-6 pb-2 pt-3">
+          <div className="mb-3 h-1.5 w-12 rounded-full bg-[#e8c7c4] sm:hidden" />
+          <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              <h3 className="font-bold text-base text-white">Quick Log & Live Tracking</h3>
+              <div className="rounded-xl border border-[#f0c7c0] bg-[#fff0ee] p-1.5 text-[#d25d5d]">
+                <Zap className="h-4 w-4" />
+              </div>
+              <h3 className="text-base font-bold text-[#2d1d22]">Quick log</h3>
             </div>
             <button
               onClick={closeQuickLog}
-              className="p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+              className="rounded-full p-1.5 text-[#6d4f58] transition hover:bg-[#fbe9e5]"
             >
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-3 gap-1 w-full bg-slate-800/80 p-1 rounded-xl mt-3 text-xs font-semibold">
+          <div className="mt-3 grid w-full grid-cols-3 gap-1 rounded-2xl bg-[#fff1ef] p-1 text-xs font-semibold text-[#725d63]">
             <button
               onClick={() => setActiveTab('meal')}
-              className={`py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+              className={`flex items-center justify-center gap-1.5 rounded-xl py-1.5 transition-all ${
                 activeTab === 'meal'
-                  ? 'bg-amber-500 text-slate-950 font-bold shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#f7b1a4] text-[#2d1d22]'
+                  : 'hover:bg-[#fbeae6]'
               }`}
             >
-              <Flame className="w-3.5 h-3.5" /> Calories
+              <Flame className="h-3.5 w-3.5" /> Calories
             </button>
             <button
               onClick={() => setActiveTab('study')}
-              className={`py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+              className={`flex items-center justify-center gap-1.5 rounded-xl py-1.5 transition-all ${
                 activeTab === 'study'
-                  ? 'bg-blue-500 text-slate-950 font-bold shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#eec7d8] text-[#2d1d22]'
+                  : 'hover:bg-[#fbeae6]'
               }`}
             >
-              <Clock className="w-3.5 h-3.5" /> Study Timer
+              <Clock className="h-3.5 w-3.5" /> Study
             </button>
             <button
               onClick={() => setActiveTab('workout')}
-              className={`py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+              className={`flex items-center justify-center gap-1.5 rounded-xl py-1.5 transition-all ${
                 activeTab === 'workout'
-                  ? 'bg-emerald-500 text-slate-950 font-bold shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#f8d9b9] text-[#2d1d22]'
+                  : 'hover:bg-[#fbeae6]'
               }`}
             >
-              <Dumbbell className="w-3.5 h-3.5" /> Workout
+              <Dumbbell className="h-3.5 w-3.5" /> Workout
             </button>
           </div>
         </div>
@@ -234,8 +234,8 @@ export const QuickLogDrawer: React.FC = () => {
                       onClick={() => setSelectedMealType(type)}
                       className={`py-2 px-3 rounded-xl border text-xs font-semibold capitalize transition-all ${
                         selectedMealType === type
-                          ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                          : 'bg-slate-800/60 border-slate-700 text-slate-400 hover:border-slate-600'
+                          ? 'border-[#f0c2b6] bg-[#fff0ef] text-[#2d1d22]'
+                          : 'border-[#f1d9d6] bg-[#fffaf8] text-[#6b575d] hover:border-[#e7b7ae]'
                       }`}
                     >
                       {type}
@@ -253,10 +253,10 @@ export const QuickLogDrawer: React.FC = () => {
                     type="number"
                     value={calorieInput}
                     onChange={(e) => setCalorieInput(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl px-4 py-3 text-2xl font-black text-white font-mono placeholder-slate-600 outline-none"
+                    className="w-full rounded-xl border border-[#f0d7d3] bg-[#fff5f3] px-4 py-3 font-mono text-2xl font-black text-[#2f1d23] outline-none transition focus:border-[#e39b97]"
                     placeholder="e.g. 700"
                   />
-                  <span className="absolute right-4 top-3.5 text-sm font-bold text-slate-400">kcal</span>
+                  <span className="absolute right-4 top-3.5 text-sm font-bold text-[#7a5d63]">kcal</span>
                 </div>
 
                 {/* Quick numeric presets */}
@@ -266,7 +266,7 @@ export const QuickLogDrawer: React.FC = () => {
                       key={preset}
                       type="button"
                       onClick={() => setCalorieInput(String(preset))}
-                      className="text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700"
+                      className="rounded-lg border border-[#f0d7d3] bg-[#fff5f3] px-2.5 py-1 text-[11px] font-semibold text-[#4f3d43] transition hover:bg-[#fdf0ee]"
                     >
                       {preset} kcal
                     </button>
@@ -276,7 +276,7 @@ export const QuickLogDrawer: React.FC = () => {
 
               <button
                 onClick={handleSaveMeal}
-                className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all mt-4"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#f7b1a4] px-4 py-3 text-sm font-bold text-[#2d1d22] transition hover:bg-[#f29d90]"
               >
                 <Check className="w-4 h-4 stroke-[3]" />
                 <span>Log Calories & Balance Window</span>
@@ -287,11 +287,11 @@ export const QuickLogDrawer: React.FC = () => {
           {/* TAB 2: LIVE STUDY STOPWATCH */}
           {activeTab === 'study' && (
             <div className="space-y-4 text-center">
-              <div className="bg-slate-950/80 p-6 rounded-2xl border border-blue-500/30">
-                <span className="text-xs uppercase font-bold text-blue-400 tracking-wider block mb-1">
+              <div className="rounded-2xl border border-[#f0d7d3] bg-[#fff7f5] p-6">
+                <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-[#d16979]">
                   {quickLog.block?.title || activeTimer.blockTitle || 'Deep Work Study Focus'}
                 </span>
-                <div className="font-mono text-5xl font-black text-white tracking-widest my-3">
+                <div className="my-3 font-mono text-5xl font-black tracking-widest text-[#2d1d22]">
                   {formatStopwatch(activeTimer.elapsedSeconds)}
                 </div>
 
@@ -305,14 +305,14 @@ export const QuickLogDrawer: React.FC = () => {
                           resumeStudyTimer();
                         }
                       }}
-                      className="px-5 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-blue-500/20"
+                      className="flex items-center gap-2 rounded-xl bg-[#e7c2d7] px-5 py-2.5 text-xs font-bold text-[#2d1d22] transition hover:bg-[#dcb7c9]"
                     >
                       <Play className="w-4 h-4" /> Start Live Stopwatch
                     </button>
                   ) : (
                     <button
                       onClick={pauseStudyTimer}
-                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2"
+                      className="flex items-center gap-2 rounded-xl bg-[#f6c39e] px-5 py-2.5 text-xs font-bold text-[#2d1d22] transition hover:bg-[#efb683]"
                     >
                       <Pause className="w-4 h-4" /> Pause
                     </button>
@@ -321,7 +321,7 @@ export const QuickLogDrawer: React.FC = () => {
                   {activeTimer.elapsedSeconds > 0 && (
                     <button
                       onClick={handleStopAndCommitTimer}
-                      className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20"
+                      className="flex items-center gap-2 rounded-xl bg-[#b7d9c2] px-5 py-2.5 text-xs font-bold text-[#2d1d22] transition hover:bg-[#abd1b7]"
                     >
                       <Check className="w-4 h-4 stroke-[3]" /> Save Session ({Math.round(activeTimer.elapsedSeconds / 60)}m)
                     </button>
@@ -330,8 +330,8 @@ export const QuickLogDrawer: React.FC = () => {
               </div>
 
               {/* Manual input fallback */}
-              <div className="pt-3 border-t border-slate-800 text-left">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+              <div className="border-t border-[#f1d9d6] pt-3 text-left">
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-[#6b575d]">
                   Or Log Minutes Manually
                 </label>
                 <div className="flex gap-2">
@@ -339,12 +339,12 @@ export const QuickLogDrawer: React.FC = () => {
                     type="number"
                     value={manualStudyMinutes}
                     onChange={(e) => setManualStudyMinutes(e.target.value)}
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 font-mono text-sm text-white"
+                    className="flex-1 rounded-xl border border-[#f0d7d3] bg-[#fff5f3] px-4 py-2 font-mono text-sm text-[#2f1d23] outline-none transition focus:border-[#e39b97]"
                     placeholder="Minutes"
                   />
                   <button
                     onClick={handleSaveManualStudy}
-                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold"
+                    className="rounded-xl border border-[#f0d7d3] bg-[#fff5f3] px-4 py-2 text-xs font-bold text-[#4f3d43] transition hover:bg-[#fdf0ee]"
                   >
                     Commit Minutes
                   </button>
@@ -356,13 +356,13 @@ export const QuickLogDrawer: React.FC = () => {
           {/* TAB 3: WORKOUT COMPLETION */}
           {activeTab === 'workout' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex items-start gap-3">
-                <Dumbbell className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 rounded-2xl border border-[#f0d7d3] bg-[#fffaf8] p-4">
+                <Dumbbell className="mt-0.5 h-5 w-5 shrink-0 text-[#6fa98f]" />
                 <div>
-                  <h4 className="font-bold text-sm text-white">
+                  <h4 className="text-sm font-bold text-[#2d1d22]">
                     {quickLog.block?.title || 'Scheduled Workout Session'}
                   </h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="mt-0.5 text-xs text-[#7a5d63]">
                     Target duration: {quickLog.block?.target_value ?? 60} minutes
                   </p>
                 </div>
@@ -371,14 +371,14 @@ export const QuickLogDrawer: React.FC = () => {
               {/* 1-Click Fast Completion Button */}
               <button
                 onClick={() => handleSaveWorkout(quickLog.block?.target_value ?? 60)}
-                className="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#b7d9c2] px-4 py-3.5 text-sm font-bold text-[#2d1d22] transition hover:bg-[#abd1b7]"
               >
                 <CheckCircle2 className="w-5 h-5" />
                 <span>1-Click Complete Full Workout ({quickLog.block?.target_value ?? 60}m)</span>
               </button>
 
-              <div className="pt-3 border-t border-slate-800">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+              <div className="border-t border-[#f1d9d6] pt-3">
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-[#6b575d]">
                   Or Log Custom Workout Duration
                 </label>
                 <div className="flex gap-2">
@@ -386,12 +386,12 @@ export const QuickLogDrawer: React.FC = () => {
                     type="number"
                     value={workoutMinutes}
                     onChange={(e) => setWorkoutMinutes(e.target.value)}
-                    className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 font-mono text-sm text-white"
+                    className="flex-1 rounded-xl border border-[#f0d7d3] bg-[#fff5f3] px-4 py-2 font-mono text-sm text-[#2f1d23] outline-none transition focus:border-[#e39b97]"
                     placeholder="Duration in minutes"
                   />
                   <button
                     onClick={() => handleSaveWorkout()}
-                    className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold"
+                    className="rounded-xl border border-[#f0d7d3] bg-[#fff5f3] px-4 py-2 text-xs font-bold text-[#4f3d43] transition hover:bg-[#fdf0ee]"
                   >
                     Log Custom
                   </button>
