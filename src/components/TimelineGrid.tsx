@@ -18,6 +18,7 @@ import {
   Dumbbell,
   Flame,
   MoreVertical,
+  Plus,
   Play,
   RotateCcw,
   Sparkles,
@@ -35,7 +36,15 @@ export const TimelineGrid: React.FC = () => {
   const openQuickLog = useRebalanceStore((s) => s.openQuickLog);
   const startStudyTimer = useRebalanceStore((s) => s.startStudyTimer);
 
-  const { data: allBlocks = [], updateBlock } = useScheduleBlocks();
+  const { data: allBlocks = [], updateBlock, createBlock } = useScheduleBlocks();
+  const [isAddingBlock, setIsAddingBlock] = useState(false);
+  const [newBlock, setNewBlock] = useState({
+    title: '',
+    category: 'academic' as ActivityCategory,
+    startTime: '09:00',
+    endTime: '10:00',
+    targetValue: '60',
+  });
 
   // Active quick action popover menu
   const [activeMenuBlockId, setActiveMenuBlockId] = useState<string | null>(null);
@@ -146,6 +155,27 @@ export const TimelineGrid: React.FC = () => {
     startStudyTimer(block);
   };
 
+  const handleCreateBlock = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newBlock.title.trim()) return;
+
+    await createBlock({
+      user_id: '00000000-0000-0000-0000-000000000001',
+      activity_id: null,
+      title: newBlock.title.trim(),
+      category: newBlock.category,
+      start_time: `${selectedDate}T${newBlock.startTime}:00.000Z`,
+      end_time: `${selectedDate}T${newBlock.endTime}:00.000Z`,
+      target_value: Number(newBlock.targetValue) || 0,
+      actual_value: 0,
+      status: 'scheduled',
+      is_buffer: false,
+      reschedule_metadata: {},
+    });
+    setNewBlock((current) => ({ ...current, title: '' }));
+    setIsAddingBlock(false);
+  };
+
   // Day View Render (24-hour vertical timeline)
   const renderDayView = () => {
     const dayBlocks = allBlocks
@@ -164,11 +194,17 @@ export const TimelineGrid: React.FC = () => {
               <span className="text-xs font-medium uppercase tracking-[0.18em] text-[#8d666d]">({dayBlocks.length} planned activities)</span>
             </h2>
             <p className="mt-1 text-xs text-[#7a5d62]">
-              Click on any block to mark complete, log custom numbers, start stopwatch, or trigger rebalance.
+              {dayBlocks.length === 0 ? 'Your day is open. Add the first block when you are ready.' : 'Click any block to log progress, start a timer, or mark it complete.'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex flex-wrap items-center justify-end gap-2 text-xs">
+            <button
+              onClick={() => setIsAddingBlock((value) => !value)}
+              className="flex items-center gap-1.5 rounded-xl bg-[#f86f6a] px-3 py-2 font-bold text-white transition hover:bg-[#ee6963]"
+            >
+              <Plus className="h-3.5 w-3.5" /> Add block
+            </button>
             <span className="flex items-center gap-1 font-medium text-[#d86a8f]">
               <span className="h-2.5 w-2.5 rounded-sm bg-[#d86a8f]" /> Academic
             </span>
@@ -180,6 +216,30 @@ export const TimelineGrid: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {isAddingBlock && (
+          <form onSubmit={handleCreateBlock} className="mb-5 grid gap-3 rounded-2xl border border-[#f1d7d3] bg-[#fff7f5] p-4 md:grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.7fr_auto] md:items-end">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">
+              Block name
+              <input required value={newBlock.title} onChange={(event) => setNewBlock({ ...newBlock, title: event.target.value })} placeholder="Study, meal, workout..." className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" />
+            </label>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">
+              Category
+              <select value={newBlock.category} onChange={(event) => setNewBlock({ ...newBlock, category: event.target.value as ActivityCategory })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]"><option value="academic">Academic</option><option value="fitness">Fitness</option><option value="meal">Meal</option></select>
+            </label>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Start<input type="time" value={newBlock.startTime} onChange={(event) => setNewBlock({ ...newBlock, startTime: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">End<input type="time" value={newBlock.endTime} onChange={(event) => setNewBlock({ ...newBlock, endTime: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Target<input type="number" min="0" value={newBlock.targetValue} onChange={(event) => setNewBlock({ ...newBlock, targetValue: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
+            <button type="submit" className="rounded-lg bg-[#b7d9c2] px-3 py-2 text-xs font-bold text-[#2d1d22]">Create</button>
+          </form>
+        )}
+
+        {dayBlocks.length === 0 && !isAddingBlock && (
+          <div className="mb-5 rounded-2xl border border-dashed border-[#efc8c2] bg-[#fffaf8] px-5 py-4 text-center">
+            <p className="font-serif text-2xl font-semibold text-[#3a252b]">A clear page for a new day</p>
+            <p className="mt-1 text-xs text-[#82666e]">Nothing is scheduled yet. Add a block above and shape the day around what matters.</p>
+          </div>
+        )}
 
         {/* Vertical 24-Hour Day Timeline */}
         <div className="relative divide-y divide-[#f3dfe1]">

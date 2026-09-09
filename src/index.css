@@ -57,6 +57,28 @@
     transform-origin: center bottom;
   }
 
+  .heart-field {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .heart {
+    position: absolute;
+    color: #f3b7b2;
+    opacity: 0;
+    animation: heartDrift 4.5s ease-in-out infinite;
+  }
+
+  .heart-1 { left: 12%; top: 66%; font-size: 22px; animation-delay: -1s; }
+  .heart-2 { left: 23%; top: 26%; font-size: 14px; animation-delay: -3s; }
+  .heart-3 { right: 18%; top: 22%; font-size: 26px; animation-delay: -2s; }
+  .heart-4 { right: 10%; top: 62%; font-size: 16px; animation-delay: -4s; }
+  .heart-5 { left: 34%; bottom: 14%; font-size: 18px; animation-delay: -2.5s; }
+  .heart-6 { right: 34%; bottom: 18%; font-size: 12px; animation-delay: -3.5s; }
+  .heart-7 { left: 8%; top: 42%; font-size: 12px; animation-delay: -1.8s; }
+  .heart-8 { right: 7%; top: 38%; font-size: 20px; animation-delay: -0.5s; }
+
   .skeleton {
     position: relative;
     overflow: hidden;
@@ -105,6 +127,12 @@
   60% {
     transform: rotate(-6deg);
   }
+}
+
+@keyframes heartDrift {
+  0%, 100% { opacity: 0; transform: translateY(18px) scale(0.75) rotate(-10deg); }
+  30%, 70% { opacity: 0.65; }
+  50% { opacity: 0.9; transform: translateY(-22px) scale(1) rotate(10deg); }
 }
 
 @keyframes skeletonPulse {

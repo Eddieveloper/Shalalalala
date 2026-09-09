@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database, Profile, Activity, ScheduleBlock, NutritionLog, ActivityDebt } from '../types/database';
-import { generateInitialScheduleAndLogs, initialActivities, initialProfile, MOCK_USER_ID } from './mockData';
+import { initialProfile, MOCK_USER_ID } from './mockData';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -37,12 +37,25 @@ class LocalDataStore {
 
   constructor() {
     this.profile = this.load(STORAGE_KEYS.PROFILE, initialProfile);
-    this.activities = this.load(STORAGE_KEYS.ACTIVITIES, initialActivities);
+    this.activities = this.load(STORAGE_KEYS.ACTIVITIES, []);
 
-    const generated = generateInitialScheduleAndLogs();
-    this.blocks = this.load(STORAGE_KEYS.BLOCKS, generated.blocks);
-    this.nutritionLogs = this.load(STORAGE_KEYS.NUTRITION, generated.nutritionLogs);
-    this.debts = this.load(STORAGE_KEYS.DEBTS, generated.debts);
+    this.blocks = this.load(STORAGE_KEYS.BLOCKS, []);
+    this.nutritionLogs = this.load(STORAGE_KEYS.NUTRITION, []);
+    this.debts = this.load(STORAGE_KEYS.DEBTS, []);
+
+    const hasLegacyDemoBlocks = this.blocks.some(
+      (block) => block.id.startsWith('block-today-') || block.id.startsWith('block-tmrw-')
+    );
+    if (hasLegacyDemoBlocks) {
+      this.activities = [];
+      this.blocks = [];
+      this.nutritionLogs = [];
+      this.debts = [];
+      this.save(STORAGE_KEYS.ACTIVITIES, this.activities);
+      this.save(STORAGE_KEYS.BLOCKS, this.blocks);
+      this.save(STORAGE_KEYS.NUTRITION, this.nutritionLogs);
+      this.save(STORAGE_KEYS.DEBTS, this.debts);
+    }
   }
 
   private load<T>(key: string, fallback: T): T {
@@ -165,14 +178,13 @@ class LocalDataStore {
     return { ...this.debts[index] };
   }
 
-  // Reset to sample data
+  // Reset the local workspace without restoring demo records.
   resetDefaults(): void {
-    const generated = generateInitialScheduleAndLogs();
     this.profile = { ...initialProfile };
-    this.activities = [...initialActivities];
-    this.blocks = [...generated.blocks];
-    this.nutritionLogs = [...generated.nutritionLogs];
-    this.debts = [...generated.debts];
+    this.activities = [];
+    this.blocks = [];
+    this.nutritionLogs = [];
+    this.debts = [];
     this.save(STORAGE_KEYS.PROFILE, this.profile);
     this.save(STORAGE_KEYS.ACTIVITIES, this.activities);
     this.save(STORAGE_KEYS.BLOCKS, this.blocks);
