@@ -28,7 +28,7 @@
 
   body {
     @apply antialiased;
-    background: linear-gradient(180deg, #fffaf8 0%, #fff3f0 100%);
+    background: #fff7f5;
     color: var(--ink);
     font-family: 'Manrope', sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -36,6 +36,30 @@
 
   #root {
     min-height: 100vh;
+  }
+
+  .app-shell {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 8% 4%, rgba(248, 170, 163, 0.22), transparent 22rem),
+      radial-gradient(circle at 94% 28%, rgba(235, 170, 202, 0.14), transparent 20rem),
+      linear-gradient(180deg, #fffaf8 0%, #fff1ef 100%);
+  }
+
+  .app-shell::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: '';
+    opacity: 0.42;
+    background-image:
+      radial-gradient(rgba(112, 67, 77, 0.12) 0.55px, transparent 0.55px),
+      repeating-linear-gradient(115deg, transparent 0 18px, rgba(255, 255, 255, 0.28) 18px 19px);
+    background-size: 7px 7px, 31px 31px;
+    mix-blend-mode: multiply;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -47,6 +71,32 @@
     font-family: 'Patrick Hand', cursive;
     letter-spacing: 0.01em;
   }
+
+  .brand-mark {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .brand-mark:hover {
+    transform: rotate(-3deg) scale(1.04);
+    box-shadow: 0 13px 28px rgba(240, 116, 111, 0.34);
+  }
+
+  .beta-footer {
+    position: relative;
+  }
+
+  .beta-footer::before,
+  .beta-footer::after {
+    position: absolute;
+    top: -1px;
+    width: 18%;
+    height: 1px;
+    content: '';
+    background: linear-gradient(90deg, transparent, #efb0ab);
+  }
+
+  .beta-footer::before { left: 0; }
+  .beta-footer::after { right: 0; transform: rotate(180deg); }
 
   .hello-screen {
     animation: helloFloat 0.8s ease-out;

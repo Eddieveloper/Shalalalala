@@ -10,7 +10,6 @@ import {
   RotateCcw,
   Settings as SettingsIcon,
   Square,
-  Zap,
 } from 'lucide-react';
 import { format, parseISO, addDays, subDays } from 'date-fns';
 import { useRebalanceStore } from '../store/useRebalanceStore';
@@ -91,8 +90,8 @@ export const Header: React.FC = () => {
       <div className="mx-auto flex flex-col items-center justify-between gap-3 md:flex-row">
         <div className="flex w-full items-center justify-between gap-4 md:w-auto">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#fda7a2] via-[#f57f7d] to-[#d76f73] text-white shadow-[0_10px_24px_rgba(240,116,111,0.35)] ring-2 ring-white">
-              <Zap className="h-5 w-5 stroke-[2.5]" />
+            <div className="brand-mark flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-[#190b18] shadow-[0_10px_24px_rgba(240,116,111,0.25)] ring-2 ring-white">
+              <img src="/rebalance-logo-pink.png" alt="Rebalanced logo" className="h-full w-full object-cover" />
             </div>
             <div>
               <div className="flex items-center gap-2">

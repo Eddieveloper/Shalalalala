@@ -21,7 +21,7 @@ export const AppContent: React.FC = () => {
   useScheduleReminders();
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,_#fffaf8_0%,_#fff4f2_100%)] text-[var(--ink)] flex flex-col selection:bg-pink-200 selection:text-[#4a252d]">
+    <div className="app-shell min-h-screen text-[var(--ink)] flex flex-col selection:bg-pink-200 selection:text-[#4a252d]">
       {isBooting && (
         <div className="welcome-screen fixed inset-0 z-[60] flex items-center justify-center overflow-hidden bg-[#fff8f7]">
           <div className="heart-field" aria-hidden="true">
@@ -60,9 +60,9 @@ export const AppContent: React.FC = () => {
             )}
           </main>
 
-          <footer className="border-t border-[#f2d6d1] py-6 px-2 text-center text-[11px] tracking-[0.2em] uppercase text-[#7a5a61]">
+          <footer className="beta-footer border-t border-[#f2d6d1] py-6 px-2 text-center text-[11px] tracking-[0.2em] uppercase text-[#7a5a61]">
             <p className="mx-auto max-w-3xl">
-              Rebalanced • Coral Journal • Academic debt, calories, and recovery in one front page.
+              Testing Beta for:Mingaw ko
             </p>
           </footer>
         </div>
