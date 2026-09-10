@@ -38,13 +38,6 @@ export const SettingsModal: React.FC = () => {
   const [dinnerStart, setDinnerStart] = useState<string>('19:00');
   const [dinnerEnd, setDinnerEnd] = useState<string>('20:00');
 
-  // Academic subjects targets
-  const [subjects, setSubjects] = useState([
-    { name: 'Data Structures & Algorithms', weeklyTargetHours: 8 },
-    { name: 'Computer Systems Architecture', weeklyTargetHours: 6 },
-    { name: 'Discrete Mathematics & Logic', weeklyTargetHours: 6 },
-  ]);
-
   const [savedToast, setSavedToast] = useState(false);
   const [subjectForm, setSubjectForm] = useState({ name: '', courseCode: '', professor: '', credits: '3', color: '#d86894' });
 
@@ -211,15 +204,7 @@ export const SettingsModal: React.FC = () => {
               </span>
             </div>
 
-            <div className="space-y-2 pt-2">
-              <span className="block font-semibold text-[#4a3940]">Registered university subjects:</span>
-              {subjects.map((s, idx) => (
-                <div key={idx} className="flex items-center justify-between rounded-xl border border-[#f0d7d3] bg-[#fff5f3] p-2.5">
-                  <span className="font-semibold text-[#2f1d23]">{s.name}</span>
-                  <span className="font-mono font-bold text-[#d4686a]">{s.weeklyTargetHours}h / week</span>
-                </div>
-              ))}
-            </div>
+            <p className="pt-2 text-[#7d6870]">Set your daily study ceiling above. Add individual subjects in the University / subjects section.</p>
           </div>
 
           {/* Section 4: Data Management & Reset */}
