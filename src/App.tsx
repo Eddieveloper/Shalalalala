@@ -6,6 +6,8 @@ import { TimelineGrid } from './components/TimelineGrid';
 import { RecoveryModal } from './components/RecoveryModal';
 import { QuickLogDrawer } from './components/QuickLogDrawer';
 import { SettingsModal } from './components/SettingsModal';
+import { Sidebar } from './components/Sidebar';
+import { DailyBloom } from './components/DailyBloom';
 import { useMissedDetector } from './hooks/useMissedDetector';
 import { useScheduleReminders } from './hooks/useScheduleReminders';
 
@@ -37,12 +39,15 @@ export const AppContent: React.FC = () => {
       )}
 
       <div className={isBooting ? 'pointer-events-none opacity-0' : 'opacity-100 transition-opacity duration-500'}>
-        <div className="mx-auto w-full max-w-[1500px] px-4 py-4 lg:px-8">
+        <div className="dashboard-layout mx-auto w-full max-w-[1600px] px-3 py-3 sm:px-5 lg:px-6">
+          <Sidebar />
+
+          <div className="dashboard-workspace">
           <Header />
 
-          <main className="flex-1 w-full py-6 space-y-6">
+          <main className="dashboard-content">
             {isBooting ? (
-              <div className="space-y-4">
+              <div className="dashboard-main-column space-y-4">
                 <div className="skeleton h-20 w-full rounded-[24px]" />
                 <div className="grid gap-5 md:grid-cols-3">
                   <div className="skeleton h-44 rounded-[24px]" />
@@ -53,9 +58,14 @@ export const AppContent: React.FC = () => {
               </div>
             ) : (
               <>
-                <ActionRequiredBanner />
-                <DashboardBanner />
-                <TimelineGrid />
+                <section className="dashboard-main-column">
+                  <ActionRequiredBanner />
+                  <DailyBloom />
+                  <DashboardBanner />
+                </section>
+                <section className="dashboard-schedule-column">
+                  <TimelineGrid />
+                </section>
               </>
             )}
           </main>
@@ -65,6 +75,7 @@ export const AppContent: React.FC = () => {
               Testing Beta for:Mingaw ko
             </p>
           </footer>
+          </div>
         </div>
       </div>
 
