@@ -1,38 +1,23 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { useRebalanceStore } from '../store/useRebalanceStore';
-
-const BLOOM_DURATION_MS = 10 * 60 * 1000;
+import { useScheduleBlocks } from '../hooks/useSchedule';
 
 export const DailyBloom: React.FC = () => {
   const selectedDate = useRebalanceStore((state) => state.selectedDate);
   const setSelectedDate = useRebalanceStore((state) => state.setSelectedDate);
   const date = new Date(`${selectedDate}T12:00:00`);
   const isToday = selectedDate === format(new Date(), 'yyyy-MM-dd');
-  const [now, setNow] = React.useState(() => Date.now());
-  const [bloomStart, setBloomStart] = React.useState<number | null>(null);
-
-  React.useEffect(() => {
-    const key = `rebalance_tulip_bloom_${selectedDate}`;
-    const saved = window.localStorage.getItem(key);
-    const start = saved ? Number(saved) : Date.now();
-    if (!saved) window.localStorage.setItem(key, String(start));
-    setBloomStart(start);
-  }, [selectedDate]);
-
-  React.useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const progress = bloomStart === null ? 0 : Math.min(1, Math.max(0, (now - bloomStart) / BLOOM_DURATION_MS));
+  const { data: blocks = [] } = useScheduleBlocks(selectedDate);
+  const completedTasks = blocks.filter((block) => block.status === 'completed').length;
+  const progress = blocks.length > 0 ? completedTasks / blocks.length : 0;
 
   return (
     <section className="daily-briefing" aria-label="Daily briefing">
       <div>
         <p className="daily-briefing-kicker">{isToday ? 'Today' : 'Selected day'}</p>
         <h2>{format(date, 'EEEE, MMMM d')}</h2>
-        <p className="daily-briefing-state">Your day is currently open.</p>
+        <p className="daily-briefing-state">{blocks.length === 0 ? 'Your day is currently open.' : `${completedTasks} of ${blocks.length} task${blocks.length === 1 ? '' : 's'} complete.`}</p>
       </div>
       <div
         className="briefing-flower"
