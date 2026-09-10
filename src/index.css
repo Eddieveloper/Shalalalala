@@ -394,6 +394,7 @@
     width: 190px;
     height: 185px;
     flex: 0 0 190px;
+    max-height: min(calc(100vh - 24px), 900px);
   }
 
   .bloom-sun {

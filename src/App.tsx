@@ -43,7 +43,7 @@ export const AppContent: React.FC = () => {
       )}
 
       <div className={isBooting ? 'pointer-events-none opacity-0' : 'opacity-100 transition-opacity duration-500'}>
-        <div className="dashboard-layout mx-auto w-full max-w-[1600px] px-3 py-3 sm:px-5 lg:px-6">
+        <div className="dashboard-layout widget-surface mx-auto w-full max-w-[1600px] px-2 py-2 sm:px-4 lg:px-5">
           <Sidebar />
 
           <div className="dashboard-workspace">

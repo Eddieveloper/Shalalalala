@@ -71,7 +71,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 mb-6 rounded-[28px] border border-[#f3d7d4] bg-white/80 px-4 py-3 shadow-[0_10px_35px_rgba(166,91,95,0.08)] backdrop-blur-xl lg:px-6">
+    <header className="sticky top-0 z-30 mb-4 rounded-[20px] border border-[#f3d7d4] bg-white/80 px-3 py-2.5 shadow-[0_10px_35px_rgba(166,91,95,0.08)] backdrop-blur-xl lg:px-5">
       <div className="mx-auto flex flex-col items-center justify-between gap-3 md:flex-row">
         <div className="flex w-full items-center justify-between gap-4 md:w-auto">
           <div className="flex items-center gap-3">
