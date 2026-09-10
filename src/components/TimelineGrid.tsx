@@ -231,7 +231,7 @@ export const TimelineGrid: React.FC = () => {
         </div>
 
         {isAddingBlock && (
-          <form onSubmit={handleCreateBlock} className="schedule-add-popover mb-5 grid gap-3 rounded-2xl border border-[#ead5d1] bg-[#fffdfa] p-4 shadow-[0_18px_40px_rgba(87,52,57,0.14)] md:grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.7fr_auto] md:items-end">
+          <form onSubmit={handleCreateBlock} className="schedule-add-popover mb-5 rounded-2xl border border-[#ead5d1] bg-[#fffdfa] p-4 shadow-[0_18px_40px_rgba(87,52,57,0.14)]">
             <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">
               Block name
               <input required value={newBlock.title} onChange={(event) => setNewBlock({ ...newBlock, title: event.target.value })} placeholder="Study, meal, workout..." className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" />
@@ -270,7 +270,7 @@ export const TimelineGrid: React.FC = () => {
                 </div>
 
                 {/* Blocks Container */}
-                <div className="grid flex-1 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                <div className="calendar-lane-grid">
                   {matchingBlocks.map((block) => {
                     const theme = getCategoryTheme(block.category, block.is_buffer);
                     const statusTheme = getStatusBadge(block.status);
@@ -292,9 +292,9 @@ export const TimelineGrid: React.FC = () => {
                           </div>
                         )}
 
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex items-center gap-2">
-                            <div className={`rounded-xl border p-1.5 ${theme.badge}`}>
+                        <div className="calendar-block-header">
+                          <div className="calendar-block-content">
+                            <div className={`calendar-block-icon rounded-xl border p-1.5 ${theme.badge}`}>
                               <theme.icon className="h-3.5 w-3.5" />
                             </div>
                             <div className="min-w-0">
@@ -302,7 +302,7 @@ export const TimelineGrid: React.FC = () => {
                                 {block.title}
                               </h4>
                               {block.subject_id && <p className="mt-0.5 text-[10px] font-semibold text-[#9a6574]">{subjects.find((subject) => subject.id === block.subject_id)?.name}</p>}
-                              <div className="mt-0.5 flex items-center gap-2 font-mono text-[11px] text-[#7f636b]">
+                              <div className="calendar-block-meta mt-0.5 font-mono text-[11px] text-[#7f636b]">
                                 <span>{format(parseISO(block.start_time), 'h:mm a')} – {format(parseISO(block.end_time), 'h:mm a')}</span>
                                 <span>•</span>
                                 <span>{durationMins}m duration</span>

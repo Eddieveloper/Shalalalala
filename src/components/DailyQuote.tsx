@@ -12,7 +12,7 @@ export const DailyQuote: React.FC = () => {
   const [index, setIndex] = useState(() => new Date().getDate() % quotes.length);
 
   useEffect(() => {
-    const timer = window.setInterval(() => setIndex((current) => (current + 1) % quotes.length), 12000);
+    const timer = window.setInterval(() => setIndex((current) => (current + 1) % quotes.length), 60 * 60 * 1000);
     return () => window.clearInterval(timer);
   }, []);
 
