@@ -332,6 +332,124 @@
 
   .bloom-complete .bloom-flower { filter: saturate(1.08); }
 
+  .time-wheel-label {
+    display: block;
+    color: #765c64;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .time-wheel-shell {
+    position: relative;
+    display: block;
+    margin-top: 4px;
+    overflow: hidden;
+    border: 1px solid #efd6d2;
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .time-wheel-shell:focus-within,
+  .time-wheel-shell:hover {
+    border-color: #e39b97;
+    box-shadow: 0 5px 14px rgba(220, 119, 111, 0.12);
+  }
+
+  .time-wheel-input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 8px 26px 8px 10px;
+    color: #2f1d23;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .time-wheel-mark {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    color: #d2767b;
+    font-size: 13px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .time-wheel-rolling {
+    animation: timeWheelRoll 320ms ease-out;
+  }
+
+  .earth-sun-clock {
+    position: relative;
+    z-index: 2;
+    width: 104px;
+    height: 104px;
+    flex: 0 0 104px;
+  }
+
+  .earth-clock-orbit {
+    position: absolute;
+    inset: 10px;
+    border: 1px dashed rgba(213, 126, 130, 0.46);
+    border-radius: 50%;
+    animation: earthOrbit 12s linear infinite;
+  }
+
+  .earth-clock-sun {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    width: 23px;
+    height: 23px;
+    align-items: center;
+    justify-content: center;
+    color: #bd6b34;
+    border-radius: 50%;
+    background: #ffd48a;
+    box-shadow: 0 0 16px rgba(247, 178, 95, 0.7);
+    transform-origin: 0 0;
+  }
+
+  .earth-clock-sun svg { width: 13px; height: 13px; }
+
+  .earth-clock-globe {
+    position: absolute;
+    top: 34px;
+    left: 34px;
+    display: flex;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    color: #d9f0e2;
+    border: 2px solid #6fae91;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #73b89c, #4e8ba3);
+    box-shadow: 0 7px 16px rgba(76, 133, 112, 0.24);
+    animation: globeSpin 8s linear infinite;
+  }
+
+  .earth-clock-globe svg { width: 22px; height: 22px; }
+
+  .earth-clock-time {
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    padding: 3px 7px;
+    border: 1px solid #f1d2cd;
+    border-radius: 999px;
+    background: rgba(255, 250, 248, 0.9);
+    color: #855f67;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
   @media (max-width: 639px) {
     .daily-bloom {
       min-height: 280px;
@@ -516,4 +634,20 @@
   100% {
     background-position: -200% 0;
   }
+}
+
+@keyframes timeWheelRoll {
+  0% { transform: translateY(0) rotateX(0); }
+  45% { transform: translateY(-3px) rotateX(12deg); }
+  100% { transform: translateY(0) rotateX(0); }
+}
+
+@keyframes earthOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes globeSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

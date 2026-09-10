@@ -28,6 +28,7 @@ import {
 import { ScheduleBlock, ActivityCategory, BlockStatus } from '../types/database';
 import { useScheduleBlocks } from '../hooks/useSchedule';
 import { useRebalanceStore } from '../store/useRebalanceStore';
+import { TimeWheelPicker } from './TimeControls';
 
 export const TimelineGrid: React.FC = () => {
   const selectedDate = useRebalanceStore((s) => s.selectedDate);
@@ -227,8 +228,8 @@ export const TimelineGrid: React.FC = () => {
               Category
               <select value={newBlock.category} onChange={(event) => setNewBlock({ ...newBlock, category: event.target.value as ActivityCategory })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]"><option value="academic">Academic</option><option value="fitness">Fitness</option><option value="meal">Meal</option></select>
             </label>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Start<input type="time" value={newBlock.startTime} onChange={(event) => setNewBlock({ ...newBlock, startTime: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">End<input type="time" value={newBlock.endTime} onChange={(event) => setNewBlock({ ...newBlock, endTime: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
+            <TimeWheelPicker label="Start" value={newBlock.startTime} onChange={(startTime) => setNewBlock({ ...newBlock, startTime })} />
+            <TimeWheelPicker label="End" value={newBlock.endTime} onChange={(endTime) => setNewBlock({ ...newBlock, endTime })} />
             <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Target<input type="number" min="0" value={newBlock.targetValue} onChange={(event) => setNewBlock({ ...newBlock, targetValue: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
             <button type="submit" className="rounded-lg bg-[#b7d9c2] px-3 py-2 text-xs font-bold text-[#2d1d22]">Create</button>
           </form>

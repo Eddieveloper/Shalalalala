@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { EarthSunClock } from './TimeControls';
 
-const BLOOM_DURATION_MS = 60 * 60 * 1000;
+const BLOOM_DURATION_MS = 10 * 60 * 1000;
 
 function getDailyBloomStart(dateKey: string) {
-  const storageKey = `rebalance_daily_bloom_${dateKey}`;
+  const storageKey = `rebalance_daily_bloom_v2_${dateKey}`;
   const savedStart = window.localStorage.getItem(storageKey);
   if (savedStart) return Number(savedStart);
 
@@ -46,6 +47,8 @@ export const DailyBloom: React.FC = () => {
           <strong>{percent}%</strong>
         </div>
       </div>
+
+      <EarthSunClock />
 
       <div className={`bloom-illustration ${isComplete ? 'bloom-complete' : ''}`} style={{ '--bloom-progress': progress } as React.CSSProperties} aria-hidden="true">
         <div className="bloom-sun" />
