@@ -13,6 +13,7 @@ import { useScheduleReminders } from './hooks/useScheduleReminders';
 import { ActivityPage } from './components/ActivityPage';
 import { InsightsPage } from './components/InsightsPage';
 import { useRebalanceStore } from './store/useRebalanceStore';
+import { DailyQuote } from './components/DailyQuote';
 
 export const AppContent: React.FC = () => {
   const [isBooting, setIsBooting] = useState(true);
@@ -60,12 +61,13 @@ export const AppContent: React.FC = () => {
                 </div>
                 <div className="skeleton h-[420px] w-full rounded-[28px]" />
               </div>
-            ) : activePage === 'activity' ? <ActivityPage /> : activePage === 'insights' ? <InsightsPage /> : activePage === 'calendar' ? <section className="dashboard-schedule-column dashboard-calendar-page"><TimelineGrid /></section> : (
+            ) : activePage === 'activity' ? <section className="full-page-view"><ActivityPage /></section> : activePage === 'insights' ? <section className="full-page-view"><InsightsPage /></section> : activePage === 'calendar' ? <section className="full-page-view"><TimelineGrid /></section> : (
               <>
                 <section className="dashboard-main-column">
                   <ActionRequiredBanner />
                   <DailyBloom />
                   <DashboardBanner />
+                  <DailyQuote />
                 </section>
                 <section className="dashboard-schedule-column">
                   <TimelineGrid />

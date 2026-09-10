@@ -297,7 +297,7 @@ export const TimelineGrid: React.FC = () => {
                             <div className={`rounded-xl border p-1.5 ${theme.badge}`}>
                               <theme.icon className="h-3.5 w-3.5" />
                             </div>
-                            <div>
+                            <div className="min-w-0">
                               <h4 className="break-words text-sm font-bold leading-snug text-[#2d1d23] tracking-tight">
                                 {block.title}
                               </h4>
@@ -311,52 +311,20 @@ export const TimelineGrid: React.FC = () => {
                           </div>
 
                           {/* Quick Actions Dropdown Trigger */}
-                          <div className="relative">
+                          <div className="block-actions relative">
+                            <button onClick={(e) => handleComplete(block, e)} className="block-action block-action-check" title="Mark complete" aria-label="Mark complete"><Check className="h-3.5 w-3.5" /></button>
+                            <button onClick={(e) => handleMarkMissed(block, e)} className="block-action block-action-close" title="Mark missed" aria-label="Mark missed"><XCircle className="h-3.5 w-3.5" /></button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setActiveMenuBlockId(isMenuOpen ? null : block.id);
+                                setEditingBlock(block);
                               }}
-                              className="p-1 rounded-md text-[#80666d] hover:text-[#d35f61] hover:bg-[#fff0ee] transition-colors"
+                              className="block-action block-action-more"
                               title="Block Options"
                             >
                               <MoreVertical className="w-4 h-4" />
                             </button>
 
-                            {/* Dropdown Menu */}
-                            {isMenuOpen && (
-                              <div
-                                onClick={(e) => e.stopPropagation()}
-                                className="absolute right-0 top-6 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-1.5 z-40 animate-fade-in text-xs font-medium space-y-0.5"
-                              >
-                                <button
-                                  onClick={(e) => handleComplete(block, e)}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-950/60 flex items-center gap-2"
-                                >
-                                  <Check className="w-3.5 h-3.5" /> Mark Completed
-                                </button>
-                                {block.category === 'academic' && (
-                                  <button
-                                    onClick={(e) => handleStartTimer(block, e)}
-                                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-blue-300 hover:bg-blue-950/60 flex items-center gap-2"
-                                  >
-                                    <Play className="w-3.5 h-3.5" /> Start Study Stopwatch
-                                  </button>
-                                )}
-                                <button
-                                  onClick={(e) => handleCustomLog(block, e)}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-amber-300 hover:bg-amber-950/60 flex items-center gap-2"
-                                >
-                                  <Clock className="w-3.5 h-3.5" /> Custom Log / Value
-                                </button>
-                                <button
-                                  onClick={(e) => handleMarkMissed(block, e)}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-rose-300 hover:bg-rose-950/60 flex items-center gap-2"
-                                >
-                                  <XCircle className="w-3.5 h-3.5" /> Mark as Missed
-                                </button>
-                              </div>
-                            )}
                           </div>
                         </div>
 
