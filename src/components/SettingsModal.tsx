@@ -12,7 +12,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { useProfile } from '../hooks/useSchedule';
+import { useProfile, useSubjects } from '../hooks/useSchedule';
 import { useRebalanceStore } from '../store/useRebalanceStore';
 import { localStore } from '../lib/supabase';
 import { useQueryClient } from '@tanstack/react-query';
@@ -22,6 +22,7 @@ export const SettingsModal: React.FC = () => {
   const setIsSettingsOpen = useRebalanceStore((s) => s.setIsSettingsOpen);
 
   const { data: profile, updateProfile } = useProfile();
+  const { data: registeredSubjects = [], createSubject, deleteSubject } = useSubjects();
   const queryClient = useQueryClient();
 
   const [calorieTarget, setCalorieTarget] = useState<number>(2200);
@@ -45,6 +46,7 @@ export const SettingsModal: React.FC = () => {
   ]);
 
   const [savedToast, setSavedToast] = useState(false);
+  const [subjectForm, setSubjectForm] = useState({ name: '', courseCode: '', professor: '', credits: '3', color: '#d86894' });
 
   useEffect(() => {
     if (profile) {
@@ -70,11 +72,18 @@ export const SettingsModal: React.FC = () => {
   };
 
   const handleResetData = () => {
-    if (confirm('Reset schedule, nutrition logs, and debts back to the default university student demo state?')) {
+    if (confirm('Clear your local schedule, meals, subjects, and activity history?')) {
       localStore.resetDefaults();
       queryClient.invalidateQueries();
       setIsSettingsOpen(false);
     }
+  };
+
+  const handleAddSubject = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!subjectForm.name.trim() || !subjectForm.courseCode.trim()) return;
+    await createSubject({ user_id: '00000000-0000-0000-0000-000000000001', name: subjectForm.name.trim(), course_code: subjectForm.courseCode.trim(), professor: subjectForm.professor.trim() || null, credits: Number(subjectForm.credits) || 3, color: subjectForm.color });
+    setSubjectForm({ name: '', courseCode: '', professor: '', credits: '3', color: '#d86894' });
   };
 
   return (
@@ -177,6 +186,12 @@ export const SettingsModal: React.FC = () => {
             </div>
           </div>
 
+          <div className="space-y-4 rounded-[22px] border border-[#f0dcd8] bg-[#fffaf8] p-4">
+            <div className="flex items-center gap-2 font-bold text-[#341d23]"><BookOpen className="h-4 w-4 text-[#d86894]" /><span>University / subjects</span></div>
+            <div className="space-y-2">{registeredSubjects.length === 0 ? <p className="text-[#7d6870]">No subjects registered yet.</p> : registeredSubjects.map((subject) => <div key={subject.id} className="flex items-center justify-between rounded-xl border border-[#f0d7d3] bg-[#fff5f3] p-3"><div><strong className="text-[#2f1d23]">{subject.name}</strong><p className="text-[11px] text-[#7d6870]">{subject.course_code} · {subject.credits} credits{subject.professor ? ` · ${subject.professor}` : ''}</p></div><button type="button" className="text-[11px] font-bold text-[#c55b62]" onClick={() => deleteSubject(subject.id)}>Remove</button></div>)}</div>
+            <form onSubmit={handleAddSubject} className="grid gap-2 md:grid-cols-2"><input required placeholder="Subject name" value={subjectForm.name} onChange={(event) => setSubjectForm({ ...subjectForm, name: event.target.value })} className="rounded-lg border border-[#f0d7d3] bg-[#fff5f3] px-3 py-2 text-[#2f1d23]" /><input required placeholder="Course code" value={subjectForm.courseCode} onChange={(event) => setSubjectForm({ ...subjectForm, courseCode: event.target.value })} className="rounded-lg border border-[#f0d7d3] bg-[#fff5f3] px-3 py-2 text-[#2f1d23]" /><input placeholder="Professor (optional)" value={subjectForm.professor} onChange={(event) => setSubjectForm({ ...subjectForm, professor: event.target.value })} className="rounded-lg border border-[#f0d7d3] bg-[#fff5f3] px-3 py-2 text-[#2f1d23]" /><input type="number" min="1" max="8" placeholder="Credits" value={subjectForm.credits} onChange={(event) => setSubjectForm({ ...subjectForm, credits: event.target.value })} className="rounded-lg border border-[#f0d7d3] bg-[#fff5f3] px-3 py-2 text-[#2f1d23]" /><button type="submit" className="rounded-lg bg-[#f5d5dc] px-3 py-2 text-xs font-bold text-[#452630] md:col-span-2">Add subject</button></form>
+          </div>
+
           {/* Section 3: Academic Subjects & Targets */}
           <div className="space-y-3 rounded-[22px] border border-[#f0dcd8] bg-[#fffaf8] p-4">
             <div className="flex items-center gap-2 font-bold text-[#341d23]">
@@ -210,9 +225,9 @@ export const SettingsModal: React.FC = () => {
           {/* Section 4: Data Management & Reset */}
           <div className="flex items-center justify-between rounded-2xl border border-[#f3d6d3] bg-[#fff6f4] p-4">
             <div>
-              <span className="block font-bold text-[#341d23]">Reset university demo state</span>
+              <span className="block font-bold text-[#341d23]">Clear local workspace</span>
               <span className="text-[11px] text-[#7d6870]">
-                Restores sample courses, workouts, meals, and active missed debt scenarios.
+                Removes your schedule, meals, subjects, and activity history from this browser.
               </span>
             </div>
             <button

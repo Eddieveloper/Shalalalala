@@ -32,10 +32,22 @@ export interface Activity {
   created_at: string;
 }
 
+export interface UniversitySubject {
+  id: string;
+  user_id: string;
+  name: string;
+  course_code: string;
+  professor: string | null;
+  credits: number;
+  color: string;
+  created_at: string;
+}
+
 export interface ScheduleBlock {
   id: string;
   user_id: string;
   activity_id: string | null;
+  subject_id?: string | null;
   title: string;
   category: ActivityCategory;
   start_time: string; // ISO 8601 string
@@ -83,6 +95,11 @@ export interface Database {
         Row: Activity;
         Insert: Omit<Activity, 'id' | 'created_at'> & { id?: string };
         Update: Partial<Activity>;
+      };
+      university_subjects: {
+        Row: UniversitySubject;
+        Insert: Omit<UniversitySubject, 'id' | 'created_at'> & { id?: string };
+        Update: Partial<UniversitySubject>;
       };
       schedule_blocks: {
         Row: ScheduleBlock;

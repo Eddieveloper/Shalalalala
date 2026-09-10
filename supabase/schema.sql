@@ -26,11 +26,24 @@ create table if not exists activities (
   created_at timestamptz default timezone('utc'::text, now()) not null
 );
 
--- 3. Calendar Scheduled Blocks
+-- 3. University Subjects
+create table if not exists university_subjects (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references auth.users on delete cascade not null,
+  name text not null,
+  course_code text not null,
+  professor text,
+  credits int default 3 not null,
+  color text default '#d86894' not null,
+  created_at timestamptz default timezone('utc'::text, now()) not null
+);
+
+-- 4. Calendar Scheduled Blocks
 create table if not exists schedule_blocks (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid references auth.users on delete cascade not null,
   activity_id uuid references activities on delete set null,
+  subject_id uuid references university_subjects on delete set null,
   title text not null,
   category text check (category in ('academic', 'fitness', 'meal')) not null,
   start_time timestamptz not null,
@@ -43,7 +56,9 @@ create table if not exists schedule_blocks (
   created_at timestamptz default timezone('utc'::text, now()) not null
 );
 
--- 4. Daily Nutrition Logs
+alter table schedule_blocks add column if not exists subject_id uuid references university_subjects on delete set null;
+
+-- 5. Daily Nutrition Logs
 create table if not exists nutrition_logs (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid references auth.users on delete cascade not null,
@@ -57,7 +72,7 @@ create table if not exists nutrition_logs (
   unique(user_id, date, meal_type)
 );
 
--- 5. Activity Debt Ledger
+-- 6. Activity Debt Ledger
 create table if not exists activity_debts (
   id uuid primary key default uuid_generate_v4(),
   user_id uuid references auth.users on delete cascade not null,
@@ -72,18 +87,21 @@ create table if not exists activity_debts (
 -- Indexes for optimal lookup performance
 create index if not exists idx_schedule_blocks_user_time on schedule_blocks(user_id, start_time, end_time);
 create index if not exists idx_schedule_blocks_status on schedule_blocks(user_id, status);
+create index if not exists idx_university_subjects_user on university_subjects(user_id);
 create index if not exists idx_nutrition_logs_user_date on nutrition_logs(user_id, date);
 create index if not exists idx_activity_debts_status on activity_debts(user_id, status);
 
 -- Enable RLS & isolation policies
 alter table profiles enable row level security;
 alter table activities enable row level security;
+alter table university_subjects enable row level security;
 alter table schedule_blocks enable row level security;
 alter table nutrition_logs enable row level security;
 alter table activity_debts enable row level security;
 
 create policy "Users manage own profiles" on profiles for all using (auth.uid() = id);
 create policy "Users manage own activities" on activities for all using (auth.uid() = user_id);
+create policy "Users manage own subjects" on university_subjects for all using (auth.uid() = user_id);
 create policy "Users manage own blocks" on schedule_blocks for all using (auth.uid() = user_id);
 create policy "Users manage own meals" on nutrition_logs for all using (auth.uid() = user_id);
 create policy "Users manage own debts" on activity_debts for all using (auth.uid() = user_id);

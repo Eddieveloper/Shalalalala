@@ -18,6 +18,7 @@ interface ActiveStudyTimer {
 }
 
 interface RebalanceStoreState {
+  activePage: 'today' | 'calendar' | 'activity' | 'insights';
   // Calendar & View State
   selectedDate: string; // 'yyyy-MM-dd'
   viewMode: 'day' | 'week';
@@ -39,6 +40,7 @@ interface RebalanceStoreState {
 
   // Actions
   setSelectedDate: (date: string) => void;
+  setActivePage: (page: 'today' | 'calendar' | 'activity' | 'insights') => void;
   setViewMode: (mode: 'day' | 'week') => void;
   setIsSettingsOpen: (open: boolean) => void;
   setSelectedBlock: (block: ScheduleBlock | null) => void;
@@ -67,6 +69,7 @@ interface RebalanceStoreState {
 }
 
 export const useRebalanceStore = create<RebalanceStoreState>((set, get) => ({
+  activePage: 'today',
   selectedDate: format(new Date(), 'yyyy-MM-dd'),
   viewMode: 'day',
   isSettingsOpen: false,
@@ -92,6 +95,7 @@ export const useRebalanceStore = create<RebalanceStoreState>((set, get) => ({
   selectedBlock: null,
 
   setSelectedDate: (date) => set({ selectedDate: date }),
+  setActivePage: (page) => set({ activePage: page }),
   setViewMode: (mode) => set({ viewMode: mode }),
   setIsSettingsOpen: (open) => set({ isSettingsOpen: open }),
   setSelectedBlock: (block) => set({ selectedBlock: block }),

@@ -81,11 +81,8 @@ export const Header: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-extrabold tracking-[-0.06em] text-[#341d23]">Rebalanced</span>
-                <span className="rounded-full border border-[#f5b7b0] bg-[#fff1ef] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c65959]">
-                  Coral Journal
-                </span>
               </div>
-              <p className="hidden text-[11px] uppercase tracking-[0.18em] text-[#82666e] sm:block">Academic, fitness, and calorie recovery</p>
+              <p className="hidden text-[11px] tracking-[0.06em] text-[#82666e] sm:block">Test schedule for mingaw</p>
             </div>
           </div>
 

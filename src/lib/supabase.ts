@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Database, Profile, Activity, ScheduleBlock, NutritionLog, ActivityDebt } from '../types/database';
+import { Database, Profile, Activity, ScheduleBlock, NutritionLog, ActivityDebt, UniversitySubject } from '../types/database';
 import { initialProfile, MOCK_USER_ID } from './mockData';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -22,6 +22,7 @@ const STORAGE_KEYS = {
   BLOCKS: 'rebalance_blocks_v1',
   NUTRITION: 'rebalance_nutrition_v1',
   DEBTS: 'rebalance_debts_v1',
+  SUBJECTS: 'rebalance_subjects_v1',
 };
 
 /**
@@ -34,6 +35,7 @@ class LocalDataStore {
   private blocks: ScheduleBlock[];
   private nutritionLogs: NutritionLog[];
   private debts: ActivityDebt[];
+  private subjects: UniversitySubject[];
 
   constructor() {
     this.profile = this.load(STORAGE_KEYS.PROFILE, initialProfile);
@@ -42,6 +44,7 @@ class LocalDataStore {
     this.blocks = this.load(STORAGE_KEYS.BLOCKS, []);
     this.nutritionLogs = this.load(STORAGE_KEYS.NUTRITION, []);
     this.debts = this.load(STORAGE_KEYS.DEBTS, []);
+    this.subjects = this.load(STORAGE_KEYS.SUBJECTS, []);
 
     const hasLegacyDemoBlocks = this.blocks.some(
       (block) => block.id.startsWith('block-today-') || block.id.startsWith('block-tmrw-')
@@ -124,6 +127,29 @@ class LocalDataStore {
     return true;
   }
 
+  getSubjects(): UniversitySubject[] {
+    return [...this.subjects];
+  }
+
+  addSubject(subject: Omit<UniversitySubject, 'id' | 'created_at'>): UniversitySubject {
+    const newSubject: UniversitySubject = {
+      ...subject,
+      id: 'subject-' + Math.random().toString(36).substring(2, 9),
+      created_at: new Date().toISOString(),
+    };
+    this.subjects.push(newSubject);
+    this.save(STORAGE_KEYS.SUBJECTS, this.subjects);
+    return newSubject;
+  }
+
+  deleteSubject(id: string): boolean {
+    const index = this.subjects.findIndex((subject) => subject.id === id);
+    if (index === -1) return false;
+    this.subjects.splice(index, 1);
+    this.save(STORAGE_KEYS.SUBJECTS, this.subjects);
+    return true;
+  }
+
   // Nutrition Logs
   getNutritionLogs(): NutritionLog[] {
     return [...this.nutritionLogs];
@@ -185,11 +211,13 @@ class LocalDataStore {
     this.blocks = [];
     this.nutritionLogs = [];
     this.debts = [];
+    this.subjects = [];
     this.save(STORAGE_KEYS.PROFILE, this.profile);
     this.save(STORAGE_KEYS.ACTIVITIES, this.activities);
     this.save(STORAGE_KEYS.BLOCKS, this.blocks);
     this.save(STORAGE_KEYS.NUTRITION, this.nutritionLogs);
     this.save(STORAGE_KEYS.DEBTS, this.debts);
+    this.save(STORAGE_KEYS.SUBJECTS, this.subjects);
   }
 }
 

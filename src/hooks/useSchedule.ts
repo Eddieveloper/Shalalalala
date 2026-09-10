@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isSupabaseConfigured, localStore, supabase } from '../lib/supabase';
-import { ActivityDebt, BlockStatus, NutritionLog, Profile, ScheduleBlock } from '../types/database';
+import { ActivityDebt, BlockStatus, NutritionLog, Profile, ScheduleBlock, UniversitySubject } from '../types/database';
 import { RecoveryStrategy } from '../types/rebalance';
 import { MOCK_USER_ID } from '../lib/mockData';
 
@@ -10,6 +10,7 @@ export const QUERY_KEYS = {
   nutritionLogs: (date?: string) => ['nutrition_logs', date ?? 'all'],
   debts: ['activity_debts'],
   activities: ['activities'],
+  subjects: ['university_subjects'],
 };
 
 // 1. Profile Hook
@@ -111,11 +112,62 @@ export function useScheduleBlocks(dateStr?: string) {
     },
   });
 
+  const deleteBlockMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('schedule_blocks').delete().eq('id', id);
+        if (error) throw error;
+        return true;
+      }
+      return localStore.deleteBlock(id);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['schedule_blocks'] }),
+  });
+
   return {
     ...query,
     updateBlock: updateBlockMutation.mutateAsync,
     createBlock: createBlockMutation.mutateAsync,
+    deleteBlock: deleteBlockMutation.mutateAsync,
   };
+}
+
+export function useSubjects() {
+  const queryClient = useQueryClient();
+  const query = useQuery<UniversitySubject[]>({
+    queryKey: QUERY_KEYS.subjects,
+    queryFn: async () => {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.from('university_subjects').select('*').order('created_at', { ascending: true });
+        if (error) throw error;
+        return data;
+      }
+      return localStore.getSubjects();
+    },
+  });
+  const createMutation = useMutation({
+    mutationFn: async (subject: Omit<UniversitySubject, 'id' | 'created_at'>) => {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.from('university_subjects').insert(subject).select().single();
+        if (error) throw error;
+        return data;
+      }
+      return localStore.addSubject(subject);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.subjects }),
+  });
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('university_subjects').delete().eq('id', id);
+        if (error) throw error;
+        return true;
+      }
+      return localStore.deleteSubject(id);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.subjects }),
+  });
+  return { ...query, createSubject: createMutation.mutateAsync, deleteSubject: deleteMutation.mutateAsync };
 }
 
 // 3. Nutrition Logs Hook

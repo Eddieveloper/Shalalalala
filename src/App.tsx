@@ -10,9 +10,13 @@ import { Sidebar } from './components/Sidebar';
 import { DailyBloom } from './components/DailyBloom';
 import { useMissedDetector } from './hooks/useMissedDetector';
 import { useScheduleReminders } from './hooks/useScheduleReminders';
+import { ActivityPage } from './components/ActivityPage';
+import { InsightsPage } from './components/InsightsPage';
+import { useRebalanceStore } from './store/useRebalanceStore';
 
 export const AppContent: React.FC = () => {
   const [isBooting, setIsBooting] = useState(true);
+  const activePage = useRebalanceStore((state) => state.activePage);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsBooting(false), 1400);
@@ -56,7 +60,7 @@ export const AppContent: React.FC = () => {
                 </div>
                 <div className="skeleton h-[420px] w-full rounded-[28px]" />
               </div>
-            ) : (
+            ) : activePage === 'activity' ? <ActivityPage /> : activePage === 'insights' ? <InsightsPage /> : activePage === 'calendar' ? <section className="dashboard-schedule-column dashboard-calendar-page"><TimelineGrid /></section> : (
               <>
                 <section className="dashboard-main-column">
                   <ActionRequiredBanner />
@@ -70,11 +74,6 @@ export const AppContent: React.FC = () => {
             )}
           </main>
 
-          <footer className="beta-footer border-t border-[#f2d6d1] py-6 px-2 text-center text-[11px] tracking-[0.2em] uppercase text-[#7a5a61]">
-            <p className="mx-auto max-w-3xl">
-              Testing Beta for:Mingaw ko
-            </p>
-          </footer>
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import { useRebalanceStore } from '../store/useRebalanceStore';
 
 export const Sidebar: React.FC = () => {
   const setIsSettingsOpen = useRebalanceStore((state) => state.setIsSettingsOpen);
+  const activePage = useRebalanceStore((state) => state.activePage);
+  const setActivePage = useRebalanceStore((state) => state.setActivePage);
 
   return (
     <aside className="dashboard-sidebar hidden lg:flex">
@@ -12,19 +14,19 @@ export const Sidebar: React.FC = () => {
       </div>
 
       <nav className="sidebar-nav" aria-label="Dashboard sections">
-        <button className="sidebar-button sidebar-button-active" title="Today" aria-label="Today">
+        <button onClick={() => setActivePage('today')} className={`sidebar-button ${activePage === 'today' ? 'sidebar-button-active' : ''}`} title="Today" aria-label="Today">
           <LayoutGrid className="h-[18px] w-[18px]" />
           <span>Today</span>
         </button>
-        <button className="sidebar-button" title="Calendar" aria-label="Calendar">
+        <button onClick={() => setActivePage('calendar')} className={`sidebar-button ${activePage === 'calendar' ? 'sidebar-button-active' : ''}`} title="Calendar" aria-label="Calendar">
           <CalendarDays className="h-[18px] w-[18px]" />
           <span>Calendar</span>
         </button>
-        <button className="sidebar-button" title="Activity" aria-label="Activity">
+        <button onClick={() => setActivePage('activity')} className={`sidebar-button ${activePage === 'activity' ? 'sidebar-button-active' : ''}`} title="Activity" aria-label="Activity">
           <ClipboardList className="h-[18px] w-[18px]" />
           <span>Activity</span>
         </button>
-        <button className="sidebar-button" title="Insights" aria-label="Insights">
+        <button onClick={() => setActivePage('insights')} className={`sidebar-button ${activePage === 'insights' ? 'sidebar-button-active' : ''}`} title="Insights" aria-label="Insights">
           <BarChart3 className="h-[18px] w-[18px]" />
           <span>Insights</span>
         </button>

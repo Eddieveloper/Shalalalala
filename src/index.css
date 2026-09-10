@@ -217,14 +217,31 @@
   .daily-briefing-today { position: absolute; top: 18px; right: 24px; color: #997078; font-size: 11px; }
   .briefing-flower { align-self: flex-end; color: #e388a5; font-size: 80px; line-height: 0.7; opacity: 0.42; transform: rotate(-12deg); }
 
-  .schedule-empty-state { display: grid; min-height: 300px; place-content: center; justify-items: center; gap: 10px; color: #7c656b; }
-  .schedule-empty-state p { color: #3a252b; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; }
-  .schedule-empty-state button { color: #d15e63; font-size: 12px; font-weight: 800; }
-  .schedule-empty-state button:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .briefing-flower { position: relative; width: 110px; height: 130px; flex: 0 0 110px; opacity: 1; transform: none; }
+  .tulip-stem { position: absolute; left: 52px; bottom: 4px; width: 6px; height: 77px; border-radius: 999px; background: linear-gradient(#72ad78, #477e62); transform-origin: bottom; transform: rotate(calc((1 - var(--tulip-progress)) * 4deg)); }
+  .tulip-leaf { position: absolute; bottom: 25px; width: 45px; height: 19px; border-radius: 100% 0 100% 0; background: #80b67c; transform-origin: bottom right; }
+  .tulip-leaf-left { left: 10px; transform: rotate(18deg) scale(calc(0.4 + var(--tulip-progress) * 0.6)); }
+  .tulip-leaf-right { left: 54px; transform: scaleX(-1) rotate(18deg) scale(calc(0.4 + var(--tulip-progress) * 0.6)); }
+  .tulip-seed { position: absolute; left: 47px; bottom: 74px; width: 16px; height: 13px; border-radius: 50% 50% 45% 45%; background: #ad7557; opacity: calc(1 - var(--tulip-progress) * 2.5); transform: scale(calc(1 - var(--tulip-progress) * 0.45)); }
+  .tulip-bloom { position: absolute; left: 50%; bottom: 70px; width: 25px; height: 43px; border: 1px solid rgba(190, 78, 111, 0.35); border-radius: 62% 62% 35% 35%; background: linear-gradient(145deg, #f291b0, #d65b83); opacity: calc(var(--tulip-progress) * 1.3); transform-origin: center bottom; transition: transform 1s linear, opacity 1s linear; }
+  .tulip-bloom-left { transform: translateX(-92%) rotate(-25deg) scale(calc(0.25 + var(--tulip-progress) * 0.75)); }
+  .tulip-bloom-center { transform: translateX(-50%) translateY(-4px) scale(calc(0.22 + var(--tulip-progress) * 0.78)); }
+  .tulip-bloom-right { transform: translateX(-8%) rotate(25deg) scale(calc(0.25 + var(--tulip-progress) * 0.75)); }
+  .tulip-bloom-center::after { position: absolute; inset: 6px 5px auto; height: 25px; border-radius: inherit; background: #f7a5be; content: ''; opacity: 0.7; }
 
-  .calendar-block { position: relative; overflow: hidden; border-radius: 10px; }
+  .schedule-empty-state { display: grid; min-height: 300px; place-content: center; justify-items: center; gap: 10px; color: #7c656b; cursor: pointer; }
+  .schedule-empty-state p { color: #3a252b; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; }
+  .schedule-empty-state:hover p { color: #d15e63; }
+
+  .calendar-block { position: relative; overflow: visible; border-radius: 10px; }
   .calendar-block-accent { position: absolute; inset: 0 auto 0 0; width: 4px; }
   .calendar-block-accent + * { margin-left: 4px; }
+
+  .block-edit-overlay { position: fixed; inset: 0; z-index: 55; display: grid; place-items: center; padding: 20px; background: rgba(38, 27, 31, 0.42); backdrop-filter: blur(5px); }
+  .block-edit-dialog { display: grid; width: min(100%, 430px); gap: 14px; padding: 22px; border: 1px solid #ead5d1; border-radius: 20px; background: #fffdfa; box-shadow: 0 24px 70px rgba(76, 45, 49, 0.18); color: #2f1d23; }
+  .block-edit-dialog h3 { margin-top: 3px; font-size: 25px; font-weight: 700; }
+  .block-edit-dialog label { display: grid; gap: 5px; color: #765c64; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+  .block-edit-dialog input, .block-edit-dialog select { width: 100%; border: 1px solid #efd6d2; border-radius: 8px; background: #fff5f3; padding: 9px 10px; color: #2f1d23; font-size: 13px; outline: none; }
 
   .dashboard-content {
     display: grid;

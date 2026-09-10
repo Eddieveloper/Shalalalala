@@ -29,6 +29,7 @@ import { ScheduleBlock, ActivityCategory, BlockStatus } from '../types/database'
 import { useScheduleBlocks } from '../hooks/useSchedule';
 import { useRebalanceStore } from '../store/useRebalanceStore';
 import { TimeWheelPicker } from './TimeControls';
+import { useSubjects } from '../hooks/useSchedule';
 
 export const TimelineGrid: React.FC = () => {
   const selectedDate = useRebalanceStore((s) => s.selectedDate);
@@ -37,7 +38,9 @@ export const TimelineGrid: React.FC = () => {
   const openQuickLog = useRebalanceStore((s) => s.openQuickLog);
   const startStudyTimer = useRebalanceStore((s) => s.startStudyTimer);
 
-  const { data: allBlocks = [], updateBlock, createBlock } = useScheduleBlocks();
+  const { data: allBlocks = [], updateBlock, createBlock, deleteBlock } = useScheduleBlocks();
+    const { data: subjects = [] } = useSubjects();
+  const [editingBlock, setEditingBlock] = useState<ScheduleBlock | null>(null);
   const [isAddingBlock, setIsAddingBlock] = useState(false);
   const [newBlock, setNewBlock] = useState({
     title: '',
@@ -156,6 +159,16 @@ export const TimelineGrid: React.FC = () => {
     openQuickLog({ type, block });
   };
 
+  const handleBlockClick = (block: ScheduleBlock) => setEditingBlock(block);
+
+  const handleSaveEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!editingBlock) return;
+    const form = new FormData(event.currentTarget);
+    await updateBlock({ id: editingBlock.id, updates: { title: String(form.get('title')), start_time: `${selectedDate}T${String(form.get('start'))}:00.000Z`, end_time: `${selectedDate}T${String(form.get('end'))}:00.000Z`, target_value: Number(form.get('target')) || 0, status: form.get('status') as BlockStatus } });
+    setEditingBlock(null);
+  };
+
   const handleStartTimer = (block: ScheduleBlock, e?: React.MouseEvent) => {
     e?.stopPropagation();
     setActiveMenuBlockId(null);
@@ -165,12 +178,14 @@ export const TimelineGrid: React.FC = () => {
   const handleCreateBlock = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!newBlock.title.trim()) return;
+    const form = event.currentTarget as HTMLFormElement;
 
     await createBlock({
       user_id: '00000000-0000-0000-0000-000000000001',
       activity_id: null,
       title: newBlock.title.trim(),
       category: newBlock.category,
+        subject_id: newBlock.category === 'academic' ? (String(new FormData(form).get('subjectId') || '') || null) : null,
       start_time: `${selectedDate}T${newBlock.startTime}:00.000Z`,
       end_time: `${selectedDate}T${newBlock.endTime}:00.000Z`,
       target_value: Number(newBlock.targetValue) || 0,
@@ -225,6 +240,7 @@ export const TimelineGrid: React.FC = () => {
               Category
               <select value={newBlock.category} onChange={(event) => setNewBlock({ ...newBlock, category: event.target.value as ActivityCategory })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]"><option value="academic">Academic</option><option value="fitness">Fitness</option><option value="meal">Meal</option></select>
             </label>
+            {newBlock.category === 'academic' && <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Subject<select name="subjectId" className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]"><option value="">No subject</option>{subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}</select></label>}
             <TimeWheelPicker label="Start" value={newBlock.startTime} onChange={(startTime) => setNewBlock({ ...newBlock, startTime })} />
             <TimeWheelPicker label="End" value={newBlock.endTime} onChange={(endTime) => setNewBlock({ ...newBlock, endTime })} />
             <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">Target<input type="number" min="0" value={newBlock.targetValue} onChange={(event) => setNewBlock({ ...newBlock, targetValue: event.target.value })} className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 font-mono text-sm font-normal tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" /></label>
@@ -233,9 +249,9 @@ export const TimelineGrid: React.FC = () => {
         )}
 
         {dayBlocks.length === 0 ? (
-          <div className="schedule-empty-state">
+          <div className="schedule-empty-state" role="button" tabIndex={0} onClick={() => setIsAddingBlock(true)} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') setIsAddingBlock(true); }}>
             <p>Nothing planned yet</p>
-            <button onClick={() => setIsAddingBlock(true)}>Add your first block</button>
+            <span>Start by adding a class, study session, meal, or workout.</span>
           </div>
         ) : (
         <div className="relative divide-y divide-[#f3dfe1]">
@@ -264,8 +280,9 @@ export const TimelineGrid: React.FC = () => {
                     return (
                       <div
                         key={block.id}
-                        onClick={() => handleCustomLog(block)}
+                        onClick={() => handleBlockClick(block)}
                         className={`calendar-block group/card relative cursor-pointer border p-3 shadow-[0_6px_18px_rgba(192,136,131,0.06)] transition-all hover:-translate-y-0.5 ${theme.bg} ${theme.border}`}
+                        style={{ minHeight: `${Math.max(64, durationMins * 1.05)}px` }}
                       >
                         <span className={`calendar-block-accent ${theme.accent}`} />
                         {/* Buffer badge */}
@@ -281,9 +298,10 @@ export const TimelineGrid: React.FC = () => {
                               <theme.icon className="h-3.5 w-3.5" />
                             </div>
                             <div>
-                              <h4 className="line-clamp-1 text-sm font-bold leading-snug text-[#2d1d23] tracking-tight">
+                              <h4 className="break-words text-sm font-bold leading-snug text-[#2d1d23] tracking-tight">
                                 {block.title}
                               </h4>
+                              {block.subject_id && <p className="mt-0.5 text-[10px] font-semibold text-[#9a6574]">{subjects.find((subject) => subject.id === block.subject_id)?.name}</p>}
                               <div className="mt-0.5 flex items-center gap-2 font-mono text-[11px] text-[#7f636b]">
                                 <span>{format(parseISO(block.start_time), 'h:mm a')} – {format(parseISO(block.end_time), 'h:mm a')}</span>
                                 <span>•</span>
@@ -299,7 +317,7 @@ export const TimelineGrid: React.FC = () => {
                                 e.stopPropagation();
                                 setActiveMenuBlockId(isMenuOpen ? null : block.id);
                               }}
-                              className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                              className="p-1 rounded-md text-[#80666d] hover:text-[#d35f61] hover:bg-[#fff0ee] transition-colors"
                               title="Block Options"
                             >
                               <MoreVertical className="w-4 h-4" />
@@ -366,6 +384,8 @@ export const TimelineGrid: React.FC = () => {
           })}
         </div>
         )}
+
+        {editingBlock && <div className="block-edit-overlay" onClick={() => setEditingBlock(null)}><form className="block-edit-dialog" onSubmit={handleSaveEdit} onClick={(event) => event.stopPropagation()}><div className="flex items-start justify-between"><div><p className="page-kicker">Edit block</p><h3>{editingBlock.title}</h3></div><button type="button" onClick={() => setEditingBlock(null)}>Close</button></div><label>Title<input name="title" defaultValue={editingBlock.title} /></label><div className="grid grid-cols-2 gap-3"><label>Start<input name="start" type="time" defaultValue={format(parseISO(editingBlock.start_time), 'HH:mm')} /></label><label>End<input name="end" type="time" defaultValue={format(parseISO(editingBlock.end_time), 'HH:mm')} /></label></div><label>Target<input name="target" type="number" defaultValue={editingBlock.target_value} /></label><label>Status<select name="status" defaultValue={editingBlock.status}><option value="scheduled">Scheduled</option><option value="completed">Completed</option><option value="missed">Missed</option></select></label><div className="flex justify-between gap-2"><button type="button" className="text-[#c55b62]" onClick={async () => { await deleteBlock(editingBlock.id); setEditingBlock(null); }}>Delete block</button><button type="submit" className="rounded-lg bg-[#f86f6a] px-4 py-2 text-xs font-bold text-white">Save changes</button></div></form></div>}
       </div>
     );
   };
