@@ -13,14 +13,10 @@ import {
 } from 'lucide-react';
 import { format, parseISO, addDays, subDays } from 'date-fns';
 import { useRebalanceStore } from '../store/useRebalanceStore';
-import { isSupabaseConfigured } from '../lib/supabase';
 import { useScheduleBlocks } from '../hooks/useSchedule';
 
 export const Header: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [remindersEnabled, setRemindersEnabled] = useState(() =>
-    typeof window !== 'undefined' && window.localStorage.getItem('rebalance_reminders_enabled') === 'true'
-  );
   const selectedDate = useRebalanceStore((s) => s.selectedDate);
   const setSelectedDate = useRebalanceStore((s) => s.setSelectedDate);
   const viewMode = useRebalanceStore((s) => s.viewMode);
@@ -48,17 +44,6 @@ export const Header: React.FC = () => {
     const interval = window.setInterval(() => setCurrentTime(new Date()), 1000);
     return () => window.clearInterval(interval);
   }, []);
-
-  const handleReminderToggle = async () => {
-    if (!('Notification' in window) || Notification.permission === 'denied') return;
-    if (Notification.permission !== 'granted') {
-      const permission = await Notification.requestPermission();
-      if (permission !== 'granted') return;
-    }
-    const nextValue = !remindersEnabled;
-    setRemindersEnabled(nextValue);
-    window.localStorage.setItem('rebalance_reminders_enabled', String(nextValue));
-  };
 
   const handleDateShift = (delta: number) => {
     const current = parseISO(selectedDate);
@@ -212,28 +197,6 @@ export const Header: React.FC = () => {
             <div className="text-right">
               <p className="font-mono text-sm font-bold tracking-wider text-[#2e1d23]">{format(currentTime, 'HH:mm:ss')}</p>
               <p className="text-[9px] uppercase tracking-[0.16em] text-[#8d6670]">Local time</p>
-            </div>
-            <button
-              onClick={handleReminderToggle}
-              className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition ${
-                remindersEnabled
-                  ? 'border-[#c9e5d2] bg-[#f2fbf4] text-[#3e8760]'
-                  : 'border-[#f1d8d3] bg-[#fff8f6] text-[#795d64] hover:bg-[#fff0ee]'
-              }`}
-              title="Allow browser reminders for upcoming blocks"
-            >
-              {remindersEnabled ? 'Reminders on' : 'Enable reminders'}
-            </button>
-            <div
-              className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${
-              isSupabaseConfigured
-                ? 'border-[#d8f1d7] bg-[#f2fbf1] text-[#2c8d5a]'
-                : 'border-[#f6d7d7] bg-[#fff5f5] text-[#905c68]'
-              }`}
-              title={isSupabaseConfigured ? 'Connected to live Supabase backend' : 'Running in Local Storage Sandbox mode'}
-            >
-              <span className={`h-2 w-2 rounded-full ${isSupabaseConfigured ? 'bg-[#49b774]' : 'bg-[#f26b6b]'}`} />
-              <span>{isSupabaseConfigured ? 'Supabase Live' : 'Local Sandbox'}</span>
             </div>
           </div>
 

@@ -12,17 +12,21 @@ export const Sidebar: React.FC = () => {
       </div>
 
       <nav className="sidebar-nav" aria-label="Dashboard sections">
-        <button className="sidebar-button sidebar-button-active" title="Overview" aria-label="Overview">
+        <button className="sidebar-button sidebar-button-active" title="Today" aria-label="Today">
           <LayoutGrid className="h-[18px] w-[18px]" />
+          <span>Today</span>
         </button>
-        <button className="sidebar-button" title="Schedule" aria-label="Schedule">
+        <button className="sidebar-button" title="Calendar" aria-label="Calendar">
           <CalendarDays className="h-[18px] w-[18px]" />
+          <span>Calendar</span>
         </button>
-        <button className="sidebar-button" title="Activity log" aria-label="Activity log">
+        <button className="sidebar-button" title="Activity" aria-label="Activity">
           <ClipboardList className="h-[18px] w-[18px]" />
+          <span>Activity</span>
         </button>
-        <button className="sidebar-button" title="Progress" aria-label="Progress">
+        <button className="sidebar-button" title="Insights" aria-label="Insights">
           <BarChart3 className="h-[18px] w-[18px]" />
+          <span>Insights</span>
         </button>
       </nav>
 
@@ -35,6 +39,7 @@ export const Sidebar: React.FC = () => {
           onClick={() => setIsSettingsOpen(true)}
         >
           <Settings className="h-[18px] w-[18px]" />
+          <span>Settings</span>
         </button>
       </div>
     </aside>

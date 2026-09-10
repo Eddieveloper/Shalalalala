@@ -50,7 +50,7 @@
 
   .dashboard-layout {
     display: grid;
-    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-columns: 148px minmax(0, 1fr);
     gap: 18px;
     min-height: 100vh;
   }
@@ -107,13 +107,18 @@
   .sidebar-button,
   .sidebar-pulse {
     display: flex;
-    width: 40px;
+    width: 116px;
     height: 40px;
     align-items: center;
     justify-content: center;
     border: 1px solid transparent;
     border-radius: 14px;
     color: #80666d;
+    gap: 10px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 700;
     transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
   }
 
@@ -131,6 +136,95 @@
     color: #d77991;
     background: #fff2f5;
   }
+
+  .sidebar-button span {
+    font-size: 12px;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid rgba(219, 193, 188, 0.65);
+    border-bottom: 1px solid rgba(219, 193, 188, 0.65);
+  }
+
+  .metric-item {
+    min-width: 0;
+    padding: 20px 22px 20px 0;
+  }
+
+  .metric-item + .metric-item {
+    padding-left: 22px;
+    border-left: 1px solid rgba(219, 193, 188, 0.65);
+  }
+
+  .metric-heading,
+  .metric-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .metric-label {
+    color: #665158;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .metric-icon {
+    display: flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+  }
+
+  .metric-icon-calories { color: #d9635d; background: #ffece8; }
+  .metric-icon-study { color: #d46397; background: #fff0f6; }
+  .metric-icon-recovery { color: #d76e60; background: #fff1ee; }
+
+  .metric-value-row { justify-content: flex-start; gap: 8px; margin-top: 14px; }
+  .metric-value { color: #2e1c23; font-size: 30px; font-weight: 900; letter-spacing: -0.06em; }
+  .metric-unit, .metric-note { color: #7d6169; font-size: 11px; }
+  .metric-note { min-height: 17px; margin-top: 4px; }
+  .metric-alert { display: flex; align-items: center; gap: 3px; color: #d15d65; font-size: 10px; font-weight: 700; }
+  .metric-bar { height: 5px; margin-top: 14px; overflow: hidden; border-radius: 999px; background: #f7e9e5; }
+  .metric-bar span { display: block; height: 100%; border-radius: inherit; transition: width 500ms ease; }
+  .metric-bar-calories { background: #ef8f88; }
+  .metric-bar-study { background: #dc83ae; }
+
+  .status-line { border-bottom: 1px solid rgba(219, 193, 188, 0.65); }
+
+  .daily-briefing {
+    position: relative;
+    display: flex;
+    min-height: 156px;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(219, 193, 188, 0.65);
+  }
+
+  .daily-briefing-kicker { color: #c76d76; font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; }
+  .daily-briefing h2 { margin-top: 3px; color: #342127; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 0.95; }
+  .daily-briefing-state { margin-top: 9px; color: #795f67; font-size: 13px; }
+  .daily-briefing-action { display: inline-flex; align-items: center; gap: 6px; margin-top: 15px; color: #d15e63; font-size: 12px; font-weight: 800; }
+  .daily-briefing-action:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .daily-briefing-today { position: absolute; top: 18px; right: 24px; color: #997078; font-size: 11px; }
+  .briefing-flower { align-self: flex-end; color: #e388a5; font-size: 80px; line-height: 0.7; opacity: 0.42; transform: rotate(-12deg); }
+
+  .schedule-empty-state { display: grid; min-height: 300px; place-content: center; justify-items: center; gap: 10px; color: #7c656b; }
+  .schedule-empty-state p { color: #3a252b; font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; }
+  .schedule-empty-state button { color: #d15e63; font-size: 12px; font-weight: 800; }
+  .schedule-empty-state button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  .calendar-block { position: relative; overflow: hidden; border-radius: 10px; }
+  .calendar-block-accent { position: absolute; inset: 0 auto 0 0; width: 4px; }
+  .calendar-block-accent + * { margin-left: 4px; }
 
   .dashboard-content {
     display: grid;
@@ -488,6 +582,12 @@
       max-height: none;
       overflow: visible;
     }
+  }
+
+  @media (max-width: 767px) {
+    .metric-grid { grid-template-columns: 1fr; }
+    .metric-item, .metric-item + .metric-item { padding: 16px 0; border-left: 0; }
+    .metric-item + .metric-item { border-top: 1px solid rgba(219, 193, 188, 0.65); }
   }
 
   .app-shell::before {

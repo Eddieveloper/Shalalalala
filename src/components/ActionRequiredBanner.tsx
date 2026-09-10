@@ -18,15 +18,15 @@ export const ActionRequiredBanner: React.FC = () => {
 
   if (unresolvedDebts.length === 0 && !activePrompt && promptQueue.length === 0) {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-[22px] border border-[#f3d7d4] bg-white/80 px-4 py-3 text-xs text-[#4d3a41] shadow-[0_12px_28px_rgba(194,126,122,0.08)]">
+      <div className="status-line flex items-center justify-between gap-3 px-1 py-2 text-xs text-[#4d3a41]">
         <div className="flex items-center gap-2">
           <div className="rounded-full bg-[#fef0ef] p-1.5 text-[#d96461]">
             <CheckCircle className="h-4 w-4" />
           </div>
-          <span>All schedules and metabolic windows are in balance. Zero pending activity debt.</span>
+          <span>Nothing needs your attention right now.</span>
         </div>
         <span className="rounded-full border border-[#f5c4bf] bg-[#fff0ee] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75d5f]">
-          In equilibrium
+          All clear
         </span>
       </div>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   format,
   parseISO,
@@ -49,6 +49,12 @@ export const TimelineGrid: React.FC = () => {
 
   // Active quick action popover menu
   const [activeMenuBlockId, setActiveMenuBlockId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const openAddBlock = () => setIsAddingBlock(true);
+    window.addEventListener('open-add-block', openAddBlock);
+    return () => window.removeEventListener('open-add-block', openAddBlock);
+  }, []);
 
   const currentDateObj = parseISO(selectedDate);
 
@@ -206,20 +212,11 @@ export const TimelineGrid: React.FC = () => {
             >
               <Plus className="h-3.5 w-3.5" /> Add block
             </button>
-            <span className="flex items-center gap-1 font-medium text-[#d86a8f]">
-              <span className="h-2.5 w-2.5 rounded-sm bg-[#d86a8f]" /> Academic
-            </span>
-            <span className="flex items-center gap-1 font-medium text-[#d97d63]">
-              <span className="h-2.5 w-2.5 rounded-sm bg-[#d97d63]" /> Fitness
-            </span>
-            <span className="flex items-center gap-1 font-medium text-[#c89439]">
-              <span className="h-2.5 w-2.5 rounded-sm bg-[#c89439]" /> Meal
-            </span>
           </div>
         </div>
 
         {isAddingBlock && (
-          <form onSubmit={handleCreateBlock} className="mb-5 grid gap-3 rounded-2xl border border-[#f1d7d3] bg-[#fff7f5] p-4 md:grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.7fr_auto] md:items-end">
+          <form onSubmit={handleCreateBlock} className="schedule-add-popover mb-5 grid gap-3 rounded-2xl border border-[#ead5d1] bg-[#fffdfa] p-4 shadow-[0_18px_40px_rgba(87,52,57,0.14)] md:grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.7fr_auto] md:items-end">
             <label className="text-[11px] font-bold uppercase tracking-wider text-[#765c64]">
               Block name
               <input required value={newBlock.title} onChange={(event) => setNewBlock({ ...newBlock, title: event.target.value })} placeholder="Study, meal, workout..." className="mt-1 w-full rounded-lg border border-[#efd6d2] bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-[#2f1d23] outline-none focus:border-[#e39b97]" />
@@ -235,14 +232,12 @@ export const TimelineGrid: React.FC = () => {
           </form>
         )}
 
-        {dayBlocks.length === 0 && !isAddingBlock && (
-          <div className="mb-5 rounded-2xl border border-dashed border-[#efc8c2] bg-[#fffaf8] px-5 py-4 text-center">
-            <p className="font-serif text-2xl font-semibold text-[#3a252b]">A clear page for a new day</p>
-            <p className="mt-1 text-xs text-[#82666e]">Nothing is scheduled yet. Add a block above and shape the day around what matters.</p>
+        {dayBlocks.length === 0 ? (
+          <div className="schedule-empty-state">
+            <p>Nothing planned yet</p>
+            <button onClick={() => setIsAddingBlock(true)}>Add your first block</button>
           </div>
-        )}
-
-        {/* Vertical 24-Hour Day Timeline */}
+        ) : (
         <div className="relative divide-y divide-[#f3dfe1]">
           {hours.map((hour) => {
             // Find blocks that fall within or start in this hour
@@ -270,8 +265,9 @@ export const TimelineGrid: React.FC = () => {
                       <div
                         key={block.id}
                         onClick={() => handleCustomLog(block)}
-                        className={`group/card relative cursor-pointer rounded-[20px] border p-3 shadow-[0_10px_22px_rgba(192,136,131,0.08)] transition-all hover:-translate-y-0.5 ${theme.bg} ${theme.border}`}
+                        className={`calendar-block group/card relative cursor-pointer border p-3 shadow-[0_6px_18px_rgba(192,136,131,0.06)] transition-all hover:-translate-y-0.5 ${theme.bg} ${theme.border}`}
                       >
+                        <span className={`calendar-block-accent ${theme.accent}`} />
                         {/* Buffer badge */}
                         {block.is_buffer && (
                           <div className="absolute -top-2 right-3 px-2 py-0.5 rounded-full bg-cyan-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider shadow-sm flex items-center gap-1">
@@ -289,7 +285,7 @@ export const TimelineGrid: React.FC = () => {
                                 {block.title}
                               </h4>
                               <div className="mt-0.5 flex items-center gap-2 font-mono text-[11px] text-[#7f636b]">
-                                <span>{format(parseISO(block.start_time), 'HH:mm')} – {format(parseISO(block.end_time), 'HH:mm')}</span>
+                                <span>{format(parseISO(block.start_time), 'h:mm a')} – {format(parseISO(block.end_time), 'h:mm a')}</span>
                                 <span>•</span>
                                 <span>{durationMins}m duration</span>
                               </div>
@@ -369,6 +365,7 @@ export const TimelineGrid: React.FC = () => {
             );
           })}
         </div>
+        )}
       </div>
     );
   };
