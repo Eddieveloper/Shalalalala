@@ -358,6 +358,14 @@
     padding: 4px 0 0;
   }
 
+  .dashboard-content.today-empty-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .today-schedule-reveal {
+    animation: scheduleReveal 320ms ease-out;
+  }
+
   .dashboard-main-column,
   .dashboard-schedule-column {
     min-width: 0;
@@ -864,6 +872,11 @@
   100% {
     background-position: -200% 0;
   }
+}
+
+@keyframes scheduleReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes timeWheelRoll {

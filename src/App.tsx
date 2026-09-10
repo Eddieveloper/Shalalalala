@@ -13,11 +13,14 @@ import { useScheduleReminders } from './hooks/useScheduleReminders';
 import { ActivityPage } from './components/ActivityPage';
 import { InsightsPage } from './components/InsightsPage';
 import { useRebalanceStore } from './store/useRebalanceStore';
+import { useScheduleBlocks } from './hooks/useSchedule';
 import { DailyQuote } from './components/DailyQuote';
 
 export const AppContent: React.FC = () => {
   const [isBooting, setIsBooting] = useState(true);
   const activePage = useRebalanceStore((state) => state.activePage);
+  const selectedDate = useRebalanceStore((state) => state.selectedDate);
+  const { data: todayBlocks = [] } = useScheduleBlocks(selectedDate);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsBooting(false), 1400);
@@ -50,7 +53,7 @@ export const AppContent: React.FC = () => {
           <div className="dashboard-workspace">
           <Header />
 
-          <main className="dashboard-content">
+          <main className={`dashboard-content ${activePage === 'today' && todayBlocks.length === 0 ? 'today-empty-content' : ''}`}>
             {isBooting ? (
               <div className="dashboard-main-column space-y-4">
                 <div className="skeleton h-20 w-full rounded-[24px]" />
@@ -69,9 +72,11 @@ export const AppContent: React.FC = () => {
                   <DashboardBanner />
                   <DailyQuote />
                 </section>
-                <section className="dashboard-schedule-column">
-                  <TimelineGrid />
-                </section>
+                {todayBlocks.length > 0 && (
+                  <section className="dashboard-schedule-column today-schedule-reveal">
+                    <TimelineGrid />
+                  </section>
+                )}
               </>
             )}
           </main>
